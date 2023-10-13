@@ -1,20 +1,4 @@
-import { csvParse } from 'd3-dsv'
 import { groups } from 'd3-array';
-import { sos_data } from "./stores";
-
-export async function loadData(url) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error('Network response was not ok' + response.statusText);
-    }
-    const csvText = await response.text();
-    const data = csvParse(csvText);
-    sos_data.set(data); // Update the store with the parsed data
-  } catch (error) {
-    console.error('Error fetching or parsing CSV data:', error);
-  }
-}
 
 export function parseID(results_id) {
   return results_id.replace(/-\d+$/, '');
