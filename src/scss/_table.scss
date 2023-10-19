@@ -2,13 +2,29 @@
 
     margin-bottom: 50px;
 
-    h3.race-name {
-        font-family: Benton Sans, Helvetica, Arial, sans-serif;
-        font-weight: 700;
-        font-size: 20px;
-        line-height: 1.3;
-        margin: 0 0 5px;
+    header {
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: end;
+        margin-bottom: 5px;
+
+        h3.race-name {
+            font-family: Benton Sans, Helvetica, Arial, sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 1.3;
+            margin: 0;
+        }
+
+        .seats-open {
+            line-height: 1;
+            font-size: 14px;
+        }
     }
+
+
 
     .results-table {
         width: 100%;
@@ -21,9 +37,6 @@
         border-spacing: 0;
         font-variant-numeric: tabular-nums;
 
-        margin-bottom: 8px;
-
-
 
         thead {
             th {
@@ -33,8 +46,9 @@
                 color: #080808;
                 border-bottom: 3px solid #eaeaea;
                 line-height: 1.2;
-                padding: 4px 0;
+                padding: 4px 0px;
                 vertical-align: bottom;
+                height: 40px;
             }
         }
 
@@ -46,7 +60,8 @@
                 position: relative;
 
                 td {
-                    padding: 6px 5px;
+                    padding: 6px 0px;
+                    vertical-align: middle;
 
                     span {
                         display: none;
@@ -63,12 +78,49 @@
             text-align: left;
             padding-left: 0;
         }
+
         .votes {
             width: 70px;
         }
+
         .pct {
             width: 50px;
         }
+
+        .choice {
+            width: 60px;
+        }
+
+        td.cand {
+            line-height: 1.3;
+        }
+    
+    }
+
+    button {
+        border: none;
+        margin: 0;
+        width: 100%;
+        text-align: left;
+        padding: 5px;
+        font-size: 13px;
+    }
+
+    //let's move this into global styles for timer
+    .interface {
+        font-family:'Benton Sans',Helvetica,sans-serif;
+        font-style: normal;
+        font-weight:normal;
+        color: #444;
+
+        &.precincts-reporting{
+            font-style: italic;
+            font-size: 12px !important;
+            margin-top: 6px !important;
+            color: #707273;
+
+        }
+
     }
 }
 

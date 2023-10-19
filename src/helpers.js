@@ -4,17 +4,12 @@ export function parseID(results_id) {
   return results_id.replace(/-\d+$/, '');
 }
 
-export function toTitleCase(input) {
-  return input.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
-}
-
 export function getRace(input) {
   const pattern = /\s*\b\w+\b\s*\bChoice\b/gi;
   const output = input.replace(pattern, '');
   return output.trim();
  
 }
-
 export function groupRaceRecords(race_records) {
   return groups(race_records, d => d.cand_order)
       .map(([key, records]) => {
@@ -27,6 +22,10 @@ export function groupRaceRecords(race_records) {
 
           return base_record;
       });
+}
+
+export function removeParentheticals(inputStr) {
+  return inputStr.replace(/\(.*?\)/g, '').trim();
 }
 
 
