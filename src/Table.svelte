@@ -102,7 +102,9 @@
         </tbody>
     </table>
     {#if race_records.length > 5}
-    <button on:click={() =>{candidates_expanded = !candidates_expanded; console.log(race_records)}}>View {candidates_expanded ? "fewer" : "all"} candidates</button>
+    <button class="expand" on:click={() =>{candidates_expanded = !candidates_expanded; console.log(race_records)}}>
+        View {candidates_expanded ? "fewer" : "all"} candidates <span>{candidates_expanded ? "-" : "+"}</span>
+    </button>
     {/if}
     <footer class="interface precincts-reporting">
         {precincts_reporting_percent}% of precincts reporting

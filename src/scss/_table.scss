@@ -97,13 +97,16 @@
     
     }
 
-    button {
+    button.expand {
         border: none;
         margin: 0;
         width: 100%;
         text-align: left;
         padding: 5px;
         font-size: 13px;
+        font-weight: bold;
+        position: relative;
+        top: -2px;
     }
 
     //let's move this into global styles for timer
