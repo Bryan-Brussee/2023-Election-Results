@@ -10,11 +10,15 @@ export function getRace(input) {
   return output.trim();
  
 }
+
+//more descriptive name
 export function groupRaceRecords(race_records) {
   return groups(race_records, d => d.cand_order)
       .map(([key, records]) => {
           const base_record = { ...records[0] }; // creating a copy to avoid mutation
           
+          //slice off last digit of office id, instead of using counter
+          //note that the final rank column will need an office_id of something like 200x
           records.forEach(({votecount, votepct}, i) => {
               base_record[`votecount_choice${i + 1}`] = votecount;
               base_record[`votepct_choice${i + 1}`] = votepct;

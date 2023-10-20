@@ -24,6 +24,7 @@
 </script>
 
 <div class="timer">
+    <p class="live2"><span class="blink">•</span>LIVE</p>
     {#if timer !== 0}
     <p>Checking for new data in: {timer} seconds</p>
     {:else}
