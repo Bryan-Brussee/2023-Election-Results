@@ -168,6 +168,11 @@
 
 @media screen and (min-width: $desktop-sm) {
     .results-module {
+
+        header h3.race-name {
+            width: auto;
+        }
+
         .results-table {
             .choice {
                 width: 80px;
