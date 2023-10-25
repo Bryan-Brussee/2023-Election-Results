@@ -2,9 +2,8 @@
   import { sos_data, filter_ids } from "./stores";
   import { apStyleTitleCase as apCase } from "ap-style-title-case";
   import { groups } from "d3-array";
-
-  // import { csvParse } from "d3-dsv";
   import { csv } from "d3-fetch";
+  import { onMount } from 'svelte';
 
   import { groupRCVRecords } from "./helpers";
 
@@ -18,9 +17,7 @@
   const data_url =
     "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/latest.csv.gz";
 
-  //testing url for today
-  // const data_url =
-  //   "http://electiondata.startribune.com/projects/2023-election-results/staging/nov/versions/results-20231013163009.csv.gz";
+
 
   const loadData = async () => {
     const data = await csv(data_url);
@@ -45,7 +42,6 @@
         record.result_id = `${record.district}-${record.office_id}-${record.cand_order}`;
       }
 
-      //
       if (record.full_name == "") {
         let split_record = record.result_id.split("-");
         //no real reason to split the district/county id
@@ -66,9 +62,11 @@
       record.precinctsreporting = parseInt(record.precinctsreporting);
       record.precinctstotal = parseInt(record.precinctstotal);
     });
+
+
   }
 
-  //and add a filter to this to work with the search bar
+
 
   $: grouped_data = groups(
     $filter_ids.length > 0
@@ -108,7 +106,22 @@
         if (b[0].substr(0,3) == "503") return -1;
       });
     });
+
+    grouped_data.sort((a,b) => {
+      if (a[0] == "Minneapolis") return -1;
+      if (b[0] == "Minneapolis") return 1;
+
+      if (a[0] == "St. Paul") return -1;
+      if (b[0] == "St. Paul") return 1;
+
+      if (a[0] == "Duluth") return -1;
+      if (b[0] == "Duluth") return 1;
+    })
   }
+
+ 
+ 
+
 
 </script>
 
@@ -116,6 +129,7 @@
   <p>Loading</p>
 {:then}
   <Timer {loadData} />
+
   <OmniSearch />
   {#each [...grouped_data] as group}
     <section class="municipality" id={group[0]}>
