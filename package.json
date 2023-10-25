@@ -21,9 +21,12 @@
     "vite-plugin-compression": "^0.5.1"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-geocoder": "^5.0.1",
     "ap-style-title-case": "^2.0.0",
     "d3-array": "^3.2.4",
     "d3-fetch": "^3.0.1",
-    "journalize": "^2.6.0"
+    "journalize": "^2.6.0",
+    "minisearch": "^6.1.0",
+    "svelte-select": "^5.7.0"
   }
 }

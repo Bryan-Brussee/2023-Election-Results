@@ -1,5 +1,5 @@
 <script>
-  import { sos_data } from "./stores";
+  import { sos_data, filter_ids } from "./stores";
   import { apStyleTitleCase as apCase } from "ap-style-title-case";
   import { group } from "d3-array";
 
@@ -10,8 +10,10 @@
 
   import location_lookup from './data/location_lookup.json';
 
+  // Components
   import Table from "./Table.svelte";
   import Timer from "./Timer.svelte";
+  import OmniSearch from "./OmniSearch.svelte";
 
   const data_url =
     "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/latest.csv.gz";
@@ -67,7 +69,9 @@
   //and add a filter to this to work with the search bar
 
   $: grouped_data = group(
-    $sos_data,
+    $filter_ids.length > 0 ? 
+      $sos_data.filter(row => $filter_ids.includes(row["result_id"])) : 
+      $sos_data,
     //group by location equivalent substring of ID
     (d) => d.result_id.split("-")[0],
     //and then group by race equivalent substring of ID. For RCV, whichs always appears to start with '2', drops last character
@@ -79,6 +83,7 @@
   <p>Loading</p>
 {:then}
   <Timer {loadData} />
+  <OmniSearch />
   {#each [...grouped_data] as location}
     <!-- 4 digit district ids indicate a school district -->
     {@const location_name = (location[0].length !== 4) ? location_lookup[location[0]] : location_lookup[location[0]] + " School District"}
