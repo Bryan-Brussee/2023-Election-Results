@@ -3,7 +3,8 @@
   import { apStyleTitleCase as apCase } from "ap-style-title-case";
   import { group } from "d3-array";
 
-  import { csvParse } from "d3-dsv";
+  // import { csvParse } from "d3-dsv";
+  import {csv} from "d3-fetch";
 
   import { groupRCVRecords } from "./helpers";
 
@@ -20,9 +21,7 @@
   //   "http://electiondata.startribune.com/projects/2023-election-results/staging/nov/versions/results-20231013163009.csv.gz";
 
   const loadData = async () => {
-    const res = await fetch(data_url);
-    const text = await res.text();
-    const data = csvParse(text);
+    const data = await csv(data_url);
     $sos_data = data;
     return;
   };

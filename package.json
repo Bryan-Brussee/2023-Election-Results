@@ -23,7 +23,7 @@
   "dependencies": {
     "ap-style-title-case": "^2.0.0",
     "d3-array": "^3.2.4",
-    "d3-dsv": "^3.0.1",
+    "d3-fetch": "^3.0.1",
     "journalize": "^2.6.0"
   }
 }
