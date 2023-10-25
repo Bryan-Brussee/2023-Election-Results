@@ -6,9 +6,9 @@ if (import.meta.env.DEV) {
   import("./scss/local-webfonts.scss")
 } 
 
-document.getElementById('proj-container').innerHTML = ""
+document.getElementById('elex-dashboard').innerHTML = ""
 const app = new App({
-  target: document.getElementById('proj-container')
+  target: document.getElementById('elex-dashboard')
 })
 
 export default app

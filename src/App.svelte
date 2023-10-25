@@ -1,19 +1,22 @@
 <script>
   import { sos_data } from "./stores";
-  import { getRace } from "./helpers";
   import { apStyleTitleCase as apCase } from "ap-style-title-case";
   import { group } from "d3-array";
 
   import { csvParse } from "d3-dsv";
 
+  import { groupRCVRecords } from "./helpers";
+
+  import location_lookup from './data/location_lookup.json';
+
   import Table from "./Table.svelte";
   import Timer from "./Timer.svelte";
 
-  let data_url =
+  const data_url =
     "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/latest.csv.gz";
 
   //testing url for today
-  // let data_url =
+  // const data_url =
   //   "http://electiondata.startribune.com/projects/2023-election-results/staging/nov/versions/results-20231013163009.csv.gz";
 
   const loadData = async () => {
@@ -24,22 +27,41 @@
     return;
   };
 
-  //basic formatting for non-override
   $: {
     $sos_data.forEach((record) => {
+
+      //hot fix for Bloomington Council elections
+      if (record.result_id.includes("06616-204")) {
+        let office_id = record.result_id.split("-")[1];
+        if (parseInt(office_id) == 2044) {
+          record.office_id = "2051"
+        }
+        if (parseInt(office_id) == 2045) {
+          record.office_id = "2052"
+        }
+        if (parseInt(office_id) == 2046) {
+          record.office_id = "2053"
+        }
+        record.result_id = `${record.district}-${record.office_id}-${record.cand_order}`}
+
+      //
+      if (record.full_name == "") {
+        let split_record = record.result_id.split("-");
+        //no real reason to split the district/county id
+        record.office_id = split_record[1];
+        record.cand_order = split_record[2];
+      }
+
       //format strings in AP style
       record.full_name = apCase(record.full_name.toLowerCase());
       record.location = apCase(record.location.toLowerCase());
       record.seatname = apCase(record.seatname.toLowerCase());
 
-      //format ints
+      //format numbers as ints or floats
       record.votecount = parseInt(record.votecount);
-      record.votepct = parseInt(record.votepct);
+      record.votepct = (!record.full_name) ? Math.round(parseFloat(record.votepct) * 100) : Math.round(parseFloat(record.votepct));
       record.precinctsreporting = parseInt(record.precinctsreporting);
       record.precinctstotal = parseInt(record.precinctstotal);
-
-      //create new key for race, equivalent to seatname without ordinal choice
-      record.race = getRace(record.seatname);
     });
   }
 
@@ -47,18 +69,11 @@
 
   $: grouped_data = group(
     $sos_data,
-    //groups by location equivalent substring of ID
+    //group by location equivalent substring of ID
     (d) => d.result_id.split("-")[0],
-    //and then groups by race equivalent substring of ID. For RCV, whichs always appears to start with '2', drops last character
-    (d) =>
-      d.result_id.split("-")[1].charAt(0) == 2
-        ? d.result_id.split("-")[1].slice(0, -1)
-        : d.result_id.split("-")[1]
+    //and then group by race equivalent substring of ID. For RCV, whichs always appears to start with '2', drops last character
+    (d) => (d.result_id.split("-")[1].charAt(0) == "2") ?  d.result_id.split("-")[1].slice(0, -1) : d.result_id.split("-")[1]
   );
-
-  $: {
-    console.log($sos_data);
-  }
 </script>
 
 {#await loadData()}
@@ -66,12 +81,15 @@
 {:then}
   <Timer {loadData} />
   {#each [...grouped_data] as location}
-    {@const location_name = [...location[1]][0][1][0].location}
+    <!-- 4 digit district ids indicate a school district -->
+    {@const location_name = (location[0].length !== 4) ? location_lookup[location[0]] : location_lookup[location[0]] + " School District"}
     <section class="municipality" id={location_name}>
       <h2 class="municipal-name">{location_name}</h2>
       <div class="table-container">
         {#each [...location[1]] as race_data}
-          <Table {race_data} />
+          <!-- Check office id and group rcv records if needed before passing data to table; pass along rcv boolean too -->
+          {@const rcv = (race_data[0].charAt(0) == "2") ? true : false}
+          <Table race_data={(rcv) ? [race_data[0], groupRCVRecords(race_data[1])] : race_data}  {rcv}/>
         {/each}
       </div>
     </section>

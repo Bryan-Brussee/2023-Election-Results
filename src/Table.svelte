@@ -1,122 +1,184 @@
 <script>
-    import { groupRaceRecords, removeParentheticals } from "./helpers";
+    import { removeParentheticals, removeRCVOrdinal } from "./helpers";
     import { intcomma, apnumber, capfirst } from "journalize";
     export let race_data;
+    export let rcv;
 
+    let final_rank = false;
 
-    $: race_records = race_data[1];
-    $: race_name = race_records[0].race;
-    $: ranked_choice = race_data[1][0].seatname.toLowerCase().includes("choice")
-        ? true
-        : false;
+    $: cand_records = race_data[1].sort((a, b) => {
+        if (a.winner && !b.winner) return -1;
+        if (!a.winner && b.winner) return 1;
 
-    $: seats_open = race_name.match(/Elect (\d+)/)
-        ? race_name.match(/Elect (\d+)/)[1]
+        const finalRoundA = a.votecount_choiceFinal || 0;
+        const finalRoundB = b.votecount_choiceFinal || 0;
+        if (finalRoundA > finalRoundB) return -1;
+        if (finalRoundA < finalRoundB) return 1;
+
+        if (a.votecount > b.votecount) return -1;
+        if (a.votecount < b.votecount) return 1;
+
+        //check for yes, make sure it comes first
+        if (a.full_name.toLowerCase() === "yes") return -1;
+        if (b.full_name.toLowerCase() === "yes") return 1;
+
+        //check for 'write-in', make sure it comes last
+        if (a.full_name.toLowerCase() === "write-in") return 1;
+        if (b.full_name.toLowerCase() === "write-in") return -1;
+
+        //sort alphabetically
+        if (a.full_name < b.full_name) return -1;
+        if (a.full_name > b.full_name) return 1;
+        return 0;
+    });
+
+    $: cand_records.forEach((record) => {
+        if (record.votecount_choiceFinal) {
+            final_rank = true;
+        }
+    });
+
+    $: seat_name = cand_records[0].seatname;
+    $: seat_name_formatted = removeParentheticals(removeRCVOrdinal(seat_name));
+
+    $: seats_open = seat_name.match(/Elect (\d+)/)
+        ? seat_name.match(/Elect (\d+)/)[1]
         : 1;
 
-    $: {
-        if (ranked_choice) {
-            race_records = groupRaceRecords(race_records);
-        }
-    }
-
     //decimal rounded to nearest integer
-    $: precincts_reporting_percent = Math.round(
-        (race_records[0].precinctsreporting / race_records[0].precinctstotal) *
+    $: precincts_reporting_pct = Math.round(
+        (cand_records[0].precinctsreporting / cand_records[0].precinctstotal) *
             100
     );
-
-    $: {
-        race_records.sort((a, b) => {
-            return b.votecount - a.votecount;
-        });
-    }
 
     let candidates_expanded = false;
 </script>
 
 <article class="results-module">
     <header>
-        <h3 class="race-name">{removeParentheticals(race_name)}</h3>
+        <h3 class="race-name">{seat_name_formatted}</h3>
 
         {#if seats_open > 1}
             <span class="seats-open interface">{seats_open} seats open</span>
         {/if}
     </header>
 
-    <table class="results-table" class:rcv={ranked_choice}>
+    <table class="results-table" class:rcv>
         <thead>
             <th class="check-container" />
             <th class="cand">Candidate</th>
-            {#if !ranked_choice}
+            {#if !rcv}
                 <th class="votes">Votes</th>
                 <th class="pct">Pct.</th>
             {:else}
                 <th class="choice">First<br />choice</th>
                 <th class="choice">Second<br />choice</th>
                 <th class="choice">Third<br />choice</th>
+                {#if final_rank}
+                    <th class="choice">Final<br />round</th>
+                {/if}
             {/if}
         </thead>
         <tbody>
-            {#each race_records as record, i}
+            {#each cand_records as record, i}
                 {#if candidates_expanded || i < 5}
-                    <tr>
+                    <tr class:winner={record.winner}>
                         <!-- check container -->
-                        <td>{@html record.winner ? " &#10004&#xFE0E;" : ""}</td>
-                        <td class="cand">{record.full_name}</td>
-                        {#if !ranked_choice}
+                        <td class="check-container"
+                            >{@html record.winner ? "&#10004&#xFE0E;" : ""}</td
+                        >
+           
+                        <td class="cand">{record.full_name} {(record.incumbent == "True") ? "(i)" : ""}</td>
+                        {#if !rcv}
                             <td class="votes">{intcomma(record.votecount)}</td>
                             <td class="pct">{record.votepct}%</td>
                         {:else}
                             <td class="choice">
-                                {record.votepct_choice1
-                                    ? record.votepct_choice1 + "%"
-                                    : "—"}
-                                <span>
-                                    {record.votecount_choice1
-                                        ? intcomma(record.votecount_choice1)
-                                        : ""}
-                                </span>
+                                <div>
+                                    <span class="pct">
+                                        {record.votepct_choice1
+                                            ? record.votepct_choice1 + "%"
+                                            : "—"}
+                                    </span>
+                                    <span class="count">
+                                        {record.votecount_choice1
+                                            ? intcomma(record.votecount_choice1)
+                                            : ""}
+                                    </span>
+                                </div></td
+                            >
+                            <td class="choice">
+                                <div>
+                                    <span class="pct">
+                                        {record.votepct_choice2
+                                            ? record.votepct_choice2 + "%"
+                                            : "—"}
+                                    </span>
+                                    <span class="count">
+                                        {record.votecount_choice2
+                                            ? intcomma(record.votecount_choice2)
+                                            : ""}
+                                    </span>
+                                </div>
                             </td>
                             <td class="choice">
-                                {record.votepct_choice2
-                                    ? record.votepct_choice2 + "%"
-                                    : "—"}
-                                <span>
-                                    {record.votecount_choice2
-                                        ? intcomma(record.votecount_choice2)
-                                        : ""}
-                                </span>
+                                <div>
+                                    <span class="pct">
+                                        {record.votepct_choice3
+                                            ? record.votepct_choice3 + "%"
+                                            : "—"}
+                                    </span>
+                                    <span class="count">
+                                        {record.votecount_choice3
+                                            ? intcomma(record.votecount_choice3)
+                                            : ""}
+                                    </span>
+                                </div>
                             </td>
-                            <td class="choice">
-                                {record.votepct_choice3
-                                    ? record.votepct_choice3 + "%"
-                                    : "—"}
-                                <span>
-                                    {record.votecount_choice3
-                                        ? intcomma(record.votecount_choice3)
-                                        : ""}
-                                </span>
-                            </td>
+
+                            {#if final_rank}
+                                <td class="choice">
+                                    <div>
+                                        <span class="pct">
+                                            {record.votepct_choiceFinal
+                                                ? record.votepct_choiceFinal +
+                                                  "%"
+                                                : "—"}
+                                        </span>
+                                        <span class="count">
+                                            {record.votecount_choiceFinal
+                                                ? intcomma(
+                                                      record.votecount_choiceFinal
+                                                  )
+                                                : ""}
+                                        </span>
+                                    </div>
+                                </td>
+                            {/if}
                         {/if}
                     </tr>
                 {/if}
             {/each}
         </tbody>
     </table>
-    {#if race_records.length > 5}
+    {#if cand_records.length > 5}
         <button
             class="expand"
             on:click={() => {
                 candidates_expanded = !candidates_expanded;
-                console.log(race_records);
+                console.log(cand_records);
             }}
         >
             View {candidates_expanded ? "fewer" : "all"} candidates
-            <span>{@html candidates_expanded ? "&#x2212&#xFE0E;" : "+"}</span>
+            <!-- HTML entities for plus and minus icons with additional string to prevent emoji render in mobile -->
+            <span
+                >{@html candidates_expanded
+                    ? "&#x2212&#xFE0E;"
+                    : "&#43&#xFE0E;"}</span
+            >
         </button>
     {/if}
     <footer class="interface precincts-reporting">
-        {precincts_reporting_percent}% of precincts reporting
+        {precincts_reporting_pct}% of precincts reporting
     </footer>
 </article>

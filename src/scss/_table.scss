@@ -1,14 +1,9 @@
 .results-module {
 
-    margin-bottom: 50px;
+    margin-bottom: 42px;
 
     header {
-
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: end;
-        margin-bottom: 5px;
+        margin-bottom: 12px;
 
         h3.race-name {
             font-family: Benton Sans, Helvetica, Arial, sans-serif;
@@ -48,24 +43,37 @@
                 line-height: 1.2;
                 padding: 4px 0px;
                 vertical-align: bottom;
-                height: 40px;
+                margin-bottom: 5px;
+                // height: 40px;
             }
         }
 
         tbody {
             font-size: 14px;
             line-height: 1.25;
-            // font-size: 15px;
 
             tr {
                 border-bottom: 1px solid #E0E0E0;
                 position: relative;
 
+                &.winner {
+                    background-color: #f0f0f0;
+
+                    .cand {
+                        font-weight: bold;
+                    }
+
+                    .check-container {
+                        padding-left: 5px;
+                        padding-right: 5px;
+                    }
+                }
+
                 td {
                     padding: 6px 0px;
                     vertical-align: middle;
 
-                    span {
+                    span.count {
                         display: none;
                     }
                 }
@@ -87,6 +95,7 @@
 
         .pct {
             width: 50px;
+            padding-right: 5px;
         }
 
         .choice {
@@ -96,7 +105,7 @@
         td.cand {
             line-height: 1.3;
         }
-    
+
     }
 
     button.expand {
@@ -113,12 +122,12 @@
 
     //let's move this into global styles for timer
     .interface {
-        font-family:'Benton Sans',Helvetica,sans-serif;
+        font-family: 'Benton Sans', Helvetica, sans-serif;
         font-style: normal;
-        font-weight:normal;
+        font-weight: normal;
         color: #444;
 
-        &.precincts-reporting{
+        &.precincts-reporting {
             font-style: italic;
             font-size: 12px !important;
             margin-top: 6px !important;
@@ -132,12 +141,27 @@
 
 @media screen and (min-width: $tablet) {
     .results-module {
-        .results-table {
-            tbody tr td span {
-                font-size: 11px;
-                color: #797D7F;
-                padding-left: 3px;
+
+        header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: end;
+            height: 50px;
+
+            h3.race-name {
+                width: 70%;
             }
+        }
+
+        .results-table {
+
+            thead th {
+                margin-bottom: 0;
+                height: 40px;
+            }
+
+
         }
     }
 }
@@ -146,10 +170,36 @@
     .results-module {
         .results-table {
             .choice {
-                width: 100px;
+                width: 80px;
             }
-            tbody tr td span {
-                display: inline-block;
+
+            tbody tr td.choice {
+
+                padding-left: 10px;
+
+                >div {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: baseline;
+                    justify-content: space-evenly;
+                }
+
+                span {
+                    display: inline-block;
+                    width: auto;
+
+           
+                    &.pct {
+                        padding: 0;
+                    }
+
+                    &.count {
+                        padding: 0;
+                        font-size: 11px;
+                        color: #797D7F;
+                        padding-left: 2px;
+                    }
+                }
             }
         }
     }

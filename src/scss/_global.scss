@@ -1,24 +1,43 @@
-section.municipality {
-	h2.municipal-name {
-		font-family: 'Whitman Display', Cambria, Georgia, serif;
-		font-style: normal;
-		font-weight: normal;
-		font-size: 44px;
-		margin-top: 80px;
-		margin-bottom: 28px;
-	}
-}
+#elex-dashboard {
 
-@media screen and (min-width: $tablet) {
+	max-width: 992px;
+	margin-left: auto;
+	margin-right: auto;
+
 	section.municipality {
-		.table-container {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			gap: 0 5%;
-			article {
-				flex: 0 0 47.5%;
-			}
+		h2.municipal-name {
+			font-family: 'Whitman Display', Cambria, Georgia, serif;
+			font-style: normal;
+			font-weight: normal;
+			font-size: 34px;
+			line-height: 1;
+			margin-top: 100px;
+			margin-bottom: 28px;
 		}
 	}
 }
+
+
+
+@media screen and (min-width: $tablet) {
+	#elex-dashboard {
+		section.municipality {
+
+			h2.municipal-name {
+				margin-bottom: 20px;
+			}
+
+			.table-container {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+				gap: 0 5%;
+				article {
+					flex: 0 0 47.5%;
+				}
+			}
+		}
+
+	} 
+}
+
