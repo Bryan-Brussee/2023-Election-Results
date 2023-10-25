@@ -104,7 +104,7 @@
                 "id": officeId
             }
         });
-
+        officesSearch.removeAll();
         officesSearch.addAll(items);
         return items;
     }
