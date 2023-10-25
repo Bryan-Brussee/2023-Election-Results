@@ -97,8 +97,15 @@
         .map(o => {
             const fullId = $sos_data.filter(row => row["seatname"] == o)[0].result_id.split("-");
             const officeId = `${fullId[0]}-${fullId[1]}`
+            const results_group = $sos_data.filter(row => row["seatname"] == o)[0].results_group
+            const append  = results_group === "SDRaceQuestions" ?
+                                " School District" :
+                                results_group === "cntyRaceQuestions" ?
+                                " County" :
+                                ""
+            const location = `${$sos_data.filter(row => row["seatname"] == o)[0].location}${append}`
             return {
-                "location": $sos_data.filter(row => row["seatname"] == o)[0].location, 
+                "location": location, 
                 "value": o, 
                 "label": o.replace(/\([\w\s\d#]+\)/, "").replace("First Choice", "").replace(/\(Elect \d+\)/,""), 
                 "id": officeId
