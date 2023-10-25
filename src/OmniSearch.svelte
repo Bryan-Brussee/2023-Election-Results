@@ -13,7 +13,7 @@
     import { sos_data, filter_ids } from "./stores";
 
     let activeAddress;
-    let searchText;
+    let filterText;
     let doingAddressSearch = false;
     let currentItems=[];
     let locationsAndRaces=[];
@@ -24,7 +24,7 @@
     const geocoder = new MapboxGeocoder({
         accessToken: accessToken,
         countries: "us",
-        bbox: [-97.24, 43.5, -89.48, 49.38],
+        bbox: [-97.5, 43, -89, 49.5],
         types: "address",
         placeholder: "Search for an address…"
     });
@@ -73,7 +73,8 @@
                 "label": f.place_name, 
                 "houseNumber": parseInt(f.address),
                 "streetName": f.text.toUpperCase(), 
-                "zip": f.context.filter((r) => r.id.includes("postcode"))[0].text
+                "zip": f.context.filter((r) => r.id.includes("postcode"))[0].text,
+                "state": f.context.filter((r) => r.id.includes("region"))[0].text
             }
         });
     });
@@ -127,8 +128,6 @@
     convertStringItemsToObjects,
     filterGroupedItems,
     }) {
-        // This syncs the text entered into svelte-select with the text in the hidden geocoder
-        searchText = filterText;
 
         if (items && loadOptions) return items;
         if (!items) return [];
@@ -154,7 +153,8 @@
     // Reactive: If selection, check if it's an address or an office/location and update $filter_ids
     $: if (selected) {
         if (selected.houseNumber) {
-            csv(`https://static.startribune.com/news/projects/all/2023-precinct-finder/zips/${selected.zip}.csv`)
+            if (selected.state === "Minnesota") {
+                csv(`https://static.startribune.com/news/projects/all/2023-precinct-finder/zips/${selected.zip}.csv`)
                 .then(precinctData => {
                     let possibleRows = precinctData.filter(
                             r => parseInt(r.HouseNbrLo) <= selected.houseNumber && 
@@ -170,6 +170,9 @@
                     }
                     streetSearch.removeAll();
                 });
+            } else {
+                $filter_ids = []
+            }
         } else {
             if (selected.groupHeader) {
                 $filter_ids = $sos_data.filter(row => row["location"] === selected.value).map(row => row["result_id"])
@@ -219,17 +222,18 @@
     }
 
     // Remove addresses from select if search field has been cleared
-    $: if (searchText === "") {
+    $: if (filterText === "") {
         currentItems = locationsAndRaces;
     }
 
     // Toggle between searching addresses if the text input starts with digits, or filtering offices/locations
     $: {
-        if (/^\d+/.exec(searchText)) {
+        if (/^\d+/.exec(filterText)) {
             if (!doingAddressSearch) {
                 doingAddressSearch = true;
             }
-            geocoder.setInput(searchText);
+            geocoder.setInput(filterText);
+            selected = undefined;
         } else {
             if (doingAddressSearch) {
                 doingAddressSearch = false;
@@ -253,10 +257,11 @@
     items={currentItems}
     {filter}
     bind:value={selected}
+    bind:filterText
     groupBy={(item) => item.location}
     groupHeaderSelectable
     on:clear={()=>{currentItems=locationsAndRaces}}
-    hideEmptyState={doingAddressSearch&&searchText.length < 6}
+    hideEmptyState={doingAddressSearch && filterText.length < 8}
     placeholder={"Select a location or office or type in a street address…"}
 >
     <div slot="empty">               
@@ -267,6 +272,22 @@
         {/if}
     </div>
 </Select>
+
+<div id="omnisearch-status">
+    {#if selected && $filter_ids.length > 0}
+        Showing election results for
+        {#if selected.houseNumber || selected.groupHeader}
+            <strong>{selected.label}</strong>
+        {:else}
+            <strong>{selected.label} ({selected.location})</strong>
+        {/if}
+        <button on:click={()=>{$filter_ids=[]; filterText="";selected=undefined}}>Show all</button>
+    {/if}
+    {#if selected && $filter_ids.length === 0}
+        No elections found for the address {selected.label}. 
+        <button on:click={()=>{filterText="";selected=undefined}}>Clear search</button>
+    {/if}
+</div>
 
 <div id="geocoder"></div>
 
