@@ -79,6 +79,11 @@
     });
 
     // Setup for Offices/Locations select
+    const officesSearch = new MiniSearch({
+        fields: ["location", "value"],
+        storeFields: ["location", "value", "label", "id"]
+    });
+
     const getLocationsAndRaces = (data) => {
         const offices = Array.from(new Set($sos_data.map(row => row["seatname"])));
         const items = offices
@@ -100,15 +105,11 @@
             }
         });
 
+        officesSearch.addAll(items);
         return items;
     }
 
 
-    const officesSearch = new MiniSearch({
-        fields: ["location", "value"],
-        storeFields: ["location", "value", "label", "id"]
-    });
-    officesSearch.addAll(locationsAndRaces);
 
     // Override default svelte-select filter function to use minisearch instead
     function filter({
