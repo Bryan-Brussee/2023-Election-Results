@@ -5,15 +5,33 @@
 	margin-right: auto;
 
 	section.municipality {
+
+		margin-top: 100px;
+
+		&:first-of-type {
+			margin-top: 60px;
+		}
+
+
 		h2.municipal-name {
 			font-family: 'Whitman Display', Cambria, Georgia, serif;
 			font-style: normal;
 			font-weight: normal;
 			font-size: 34px;
 			line-height: 1;
-			margin-top: 100px;
 			margin-bottom: 28px;
+
+		
 		}
+	}
+
+	.sticky-wrapper {
+		position: sticky;
+		position: -webkit-sticky;
+		top: 0;
+		background-color: white;
+		z-index: 2;
+		padding: 10px 0 1px;
 	}
 }
 

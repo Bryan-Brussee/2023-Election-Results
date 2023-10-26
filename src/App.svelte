@@ -3,7 +3,6 @@
   import { apStyleTitleCase as apCase } from "ap-style-title-case";
   import { groups } from "d3-array";
   import { csv } from "d3-fetch";
-  import { onMount } from 'svelte';
 
   import { groupRCVRecords } from "./helpers";
 
@@ -27,20 +26,6 @@
 
   $: {
     $sos_data.forEach((record) => {
-      //hot fix for Bloomington Council elections
-      if (record.result_id.includes("06616-204")) {
-        let office_id = record.result_id.split("-")[1];
-        if (parseInt(office_id) == 2044) {
-          record.office_id = "2051";
-        }
-        if (parseInt(office_id) == 2045) {
-          record.office_id = "2052";
-        }
-        if (parseInt(office_id) == 2046) {
-          record.office_id = "2053";
-        }
-        record.result_id = `${record.district}-${record.office_id}-${record.cand_order}`;
-      }
 
       if (record.full_name == "") {
         let split_record = record.result_id.split("-");
@@ -64,9 +49,18 @@
     });
 
 
+    $sos_data.sort((a, b) => {
+
+        //sorts city questions to the bottom
+        if (a.result_id.split("-")[1].substr(0,3) == "113") return 1;
+        if (b.result_id.split("-")[1].substr(0,3) == "113") return -1;
+
+        //sort school questions to the bottom
+        if (a.result_id.split("-")[1].substr(0,3) == "503") return 1;
+        if (b.result_id.split("-")[1].substr(0,3) == "503") return -1;
+      });
+
   }
-
-
 
   $: grouped_data = groups(
     $filter_ids.length > 0
@@ -93,18 +87,6 @@
       } else {
         group[0] = location_lookup[location_id];
       }
-
-      let races = group[1];
-
-      races.sort((a, b) => {
-        //sorts city questions to the bottom
-        if (a[0].substr(0,3) == "113") return 1;
-        if (b[0].substr(0,3) == "113") return -1;
-
-        //sort school questions to the bottom
-        if (a[0].substr(0,3) == "503") return 1;
-        if (b[0].substr(0,3) == "503") return -1;
-      });
     });
 
     grouped_data.sort((a,b) => {
@@ -129,9 +111,12 @@
   <p>Loading</p>
 {:then}
   <Timer {loadData} />
+  <div class="sticky-wrapper">
+    <OmniSearch />
+  </div>
 
-  <OmniSearch />
-  {#each [...grouped_data] as group}
+  <div class="section-container">
+    {#each [...grouped_data] as group}
     <section class="municipality" id={group[0]}>
       <h2 class="municipal-name">{group[0]}</h2>
       <div class="table-container">
@@ -148,6 +133,9 @@
       </div>
     </section>
   {/each}
+
+  </div>
+
 {:catch error}
   <p>{error.message}</p>
 {/await}

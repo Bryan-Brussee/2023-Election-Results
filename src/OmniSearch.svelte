@@ -262,7 +262,10 @@
     groupHeaderSelectable
     on:clear={()=>{currentItems=locationsAndRaces}}
     hideEmptyState={doingAddressSearch && filterText.length < 8}
-    placeholder={"Select a location or office or type in a street address…"}
+    placeholder={"Select from dropdown or type address..."}
+    inputStyles="font-family:'Benton Sans',Helvetica,sans-serif;"
+    --font-size="15px"
+    --border="1px solid #ccc"
 >
     <div slot="empty">               
         {#if doingAddressSearch}
@@ -277,9 +280,9 @@
     {#if selected && $filter_ids.length > 0}
         Showing election results for
         {#if selected.houseNumber || selected.groupHeader}
-            <strong>{selected.label}</strong>
+            <span>{selected.label}</span>
         {:else}
-            <strong>{selected.label} ({selected.location})</strong>
+            <span>{selected.label} ({selected.location})</span>
         {/if}
         <button on:click={()=>{$filter_ids=[]; filterText="";selected=undefined}}>Show all</button>
     {/if}

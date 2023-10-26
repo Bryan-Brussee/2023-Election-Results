@@ -1,0 +1,29 @@
+//styles that aren't supported by props from Select component
+
+.svelte-select {
+    .svelte-select-list,
+    .selected-item {
+        font-family:'Benton Sans',Helvetica,sans-serif;
+     }
+}
+
+#omnisearch-status {
+    font-family:'Benton Sans',Helvetica,sans-serif;
+    margin-top: 10px;
+    font-size: 16px;
+
+
+    button {
+        font-weight: bold;
+        font-size: 13px;
+        background: none;
+        border: none;
+        padding: 0;
+        display: block;
+        border-bottom: 1px solid black;
+        margin-top: 8px;
+
+    }
+}
+
+
