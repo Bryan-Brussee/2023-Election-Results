@@ -1,6 +1,8 @@
 <script>
     import { removeParentheticals, removeRCVOrdinal } from "./helpers";
     import { intcomma, apnumber, capfirst } from "journalize";
+    import geodata from "./data/geometries.json";
+    import DistrictLocatorMap from "./DistrictLocatorMap.svelte";
     export let race_data;
     export let rcv;
 
@@ -52,6 +54,31 @@
     );
 
     let candidates_expanded = false;
+
+    // Map stuff
+    const getWard = (officeTitle) => {
+        const wardRe = /(?:Ward|District) (\d+)/
+        const found = officeTitle.match(wardRe)
+        return found ? found[1].padStart(2, "0") : ""
+    }
+
+    const filterDistrict = (geojson, subdistrict) => {
+        return {
+            type: "FeatureCollection",
+            features: geojson.features.filter(
+                (f) =>
+                    f.properties.district === subdistrict
+            ),
+        };
+    };
+
+    const location_id = race_data[1][0]["result_id"].split("-")[0]
+    const subdistrict = race_data[1][0]["results_group"] === "cntyRaceQuestions"
+        ? race_data[1][0]["district"]
+        : getWard(race_data[1][0]["seatname"]) !== ""
+        ? getWard(race_data[1][0]["seatname"])
+        : undefined
+    
 </script>
 
 <article class="results-module">
@@ -61,6 +88,17 @@
         {#if seats_open > 1}
             <span class="seats-open interface">{seats_open} seats open</span>
         {/if}
+
+        <div style='width:100px;'>
+            <DistrictLocatorMap 
+                outline={geodata[location_id]} 
+                district={
+                    subdistrict 
+                    ? filterDistrict(geodata[location_id], subdistrict)
+                    : geodata[location_id]
+                } 
+            />
+        </div>
     </header>
 
     <table class="results-table" class:rcv>
