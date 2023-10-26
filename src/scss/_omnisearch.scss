@@ -9,8 +9,8 @@
 
 #omnisearch-status {
     font-family:'Benton Sans',Helvetica,sans-serif;
-    margin-top: 10px;
     font-size: 16px;
+    margin-top: 30px;
 
 
     button {
@@ -26,4 +26,39 @@
     }
 }
 
+.sticky-wrapper {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    background-color: white;
+    z-index: 2;
+    padding: 10px 0 1px;
+    width: 100vw;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding: 1rem 1.5rem 1rem;
+
+    &:after {
+        content: "";
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        width: 100%;
+        z-index: -1;
+        box-shadow: transparent 0px 0px, transparent 0px 0px, rgba(0, 0, 0, 0.15) 0px 6px 6px -6px;
+    }
+}
+
+@media screen and (min-width: $desktop-sm) {
+    .sticky-wrapper {
+        margin-left: calc((#{$desktop-sm} - 100vw) / 2);
+        margin-right: calc((#{$desktop-sm} - 100vw) / 2);
+        padding-left: calc((100vw - 992px)/2);
+
+        .svelte-select {
+            max-width: 992px;
+        }
+    }
+}
 

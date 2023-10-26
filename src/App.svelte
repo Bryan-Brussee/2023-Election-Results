@@ -111,9 +111,9 @@
   <p>Loading</p>
 {:then}
   <Timer {loadData} />
-  <div class="sticky-wrapper">
+
     <OmniSearch />
-  </div>
+
 
   <div class="section-container">
     {#each [...grouped_data] as group}

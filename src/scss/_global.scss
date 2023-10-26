@@ -6,33 +6,28 @@
 
 	section.municipality {
 
-		margin-top: 100px;
+		margin-top: 75px;
+		border-top: 2px solid black;
+		padding-top: 25px;
 
 		&:first-of-type {
-			margin-top: 60px;
+			margin-top: 30px;
 		}
 
 
 		h2.municipal-name {
 			font-family: 'Whitman Display', Cambria, Georgia, serif;
 			font-style: normal;
-			font-weight: normal;
-			font-size: 34px;
+			font-weight: bold;
+			font-size: 38px;
 			line-height: 1;
 			margin-bottom: 28px;
 
-		
+
 		}
 	}
 
-	.sticky-wrapper {
-		position: sticky;
-		position: -webkit-sticky;
-		top: 0;
-		background-color: white;
-		z-index: 2;
-		padding: 10px 0 1px;
-	}
+
 }
 
 
@@ -50,12 +45,12 @@
 				flex-direction: row;
 				flex-wrap: wrap;
 				gap: 0 5%;
+
 				article {
 					flex: 0 0 47.5%;
 				}
 			}
 		}
 
-	} 
+	}
 }
-

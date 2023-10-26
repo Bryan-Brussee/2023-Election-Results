@@ -253,7 +253,10 @@
 </script>
 
 
-<Select
+
+<div class="sticky-wrapper">
+
+    <Select
     items={currentItems}
     {filter}
     bind:value={selected}
@@ -265,7 +268,7 @@
     placeholder={"Select from dropdown or type address..."}
     inputStyles="font-family:'Benton Sans',Helvetica,sans-serif;"
     --font-size="15px"
-    --border="1px solid #ccc"
+    --border="1px solid #999"
 >
     <div slot="empty">               
         {#if doingAddressSearch}
@@ -275,10 +278,11 @@
         {/if}
     </div>
 </Select>
+</div>
 
 <div id="omnisearch-status">
     {#if selected && $filter_ids.length > 0}
-        Showing election results for
+        Showing results for
         {#if selected.houseNumber || selected.groupHeader}
             <span>{selected.label}</span>
         {:else}
