@@ -1,7 +1,7 @@
 <script>
     export let loadData;
 
-    let interval = 60;
+    let interval = 5;
     $: timer = interval;
 
     import { onMount } from 'svelte';

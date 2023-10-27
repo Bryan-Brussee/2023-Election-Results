@@ -58,6 +58,12 @@
       });
 
   }
+
+$: {
+  console.log($sos_data);
+  console.log($filter_ids);
+}
+
   // $: {
   //   $sos_data.forEach((record) => {
   //     // if (record.full_name.toLowerCase() == "yes") {

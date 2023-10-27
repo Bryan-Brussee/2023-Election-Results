@@ -276,7 +276,7 @@
     hideEmptyState={doingAddressSearch && filterText.length < 8}
     placeholder={"Select from dropdown or type address..."}
     inputStyles="font-family:'Benton Sans',Helvetica,sans-serif;"
-    --font-size="15px"
+    --font-size="16px"
     --border="1px solid #707273"
 >
     <div slot="empty">               
