@@ -7,30 +7,35 @@
     import DistrictLocatorMap from "./DistrictLocatorMap.svelte";
     export let race_data;
     export let rcv;
+    export let mobile;
 
     let final_rank = false;
 
     $: cand_records = race_data[1].sort((a, b) => {
+
+        //if we have winners, sort them to the top
         if (a.winner && !b.winner) return -1;
         if (!a.winner && b.winner) return 1;
 
+        //else if we have final round records, sort those to the top
         const finalRoundA = a.votecount_choiceFinal || 0;
         const finalRoundB = b.votecount_choiceFinal || 0;
         if (finalRoundA > finalRoundB) return -1;
         if (finalRoundA < finalRoundB) return 1;
 
+        //else if we have votes, sort those to the top
         if (a.votecount > b.votecount) return -1;
         if (a.votecount < b.votecount) return 1;
 
-        //check for yes, make sure it comes first
+        //else sort yes to top for yes no questions
         if (a.full_name.toLowerCase() === "yes") return -1;
         if (b.full_name.toLowerCase() === "yes") return 1;
 
-        //check for 'write-in', make sure it comes last
+        //else if write in response, sort to bottom
         if (a.full_name.toLowerCase() === "write-in") return 1;
         if (b.full_name.toLowerCase() === "write-in") return -1;
 
-        //sort alphabetically
+        //for all other cases, sort alphabetically
         if (a.full_name < b.full_name) return -1;
         if (a.full_name > b.full_name) return 1;
         return 0;
@@ -44,7 +49,7 @@
 
     $: seat_name = cand_records[0].seatname;
     $: seat_name_formatted = apCase(
-        removeParentheticals(removeRCVOrdinal(seat_name))
+        removeParentheticals(removeRCVOrdinal(seat_name).toLowerCase())
     );
 
     $: seats_open = seat_name.match(/Elect (\d+)/)
@@ -56,6 +61,9 @@
         (cand_records[0].precinctsreporting / cand_records[0].precinctstotal) *
             100
     );
+
+    $: question_table = /113|503/.test(cand_records[0].result_id.split("-")[1].substr(0,3));
+    $: st_paul_race = cand_records[0].result_id.split("-")[0] === "58000";
 
     let candidates_expanded = false;
 
@@ -110,14 +118,16 @@
     <table class="results-table" class:rcv>
         <thead>
             <th class="check-container" />
-            <th class="cand">Candidate</th>
+            <th class="cand">{question_table ? "Choice" : "Candidate"}</th>
             {#if !rcv}
                 <th class="votes">Votes</th>
                 <th class="pct">Pct.</th>
             {:else}
                 <th class="choice">First<br />choice</th>
+                {#if !st_paul_race}
                 <th class="choice">Second<br />choice</th>
                 <th class="choice">Third<br />choice</th>
+                {/if}
                 {#if final_rank}
                     <th class="choice">Final<br />round</th>
                 {/if}
@@ -138,13 +148,13 @@
                         </td>
                         {#if !rcv}
                             <td class="votes">{intcomma(record.votecount)}</td>
-                            <td class="pct">{record.votepct}%</td>
+                            <td class="pct">{record.votepct.toFixed(1)}%</td>
                         {:else}
                             <td class="choice">
                                 <div>
                                     <span class="pct">
                                         {record.votepct_choice1
-                                            ? record.votepct_choice1 + "%"
+                                            ? record.votepct_choice1.toFixed( mobile ? 1 : 0 ) + "%"
                                             : "—"}
                                     </span>
                                     <span class="count">
@@ -154,11 +164,12 @@
                                     </span>
                                 </div></td
                             >
+                            {#if !st_paul_race}
                             <td class="choice">
                                 <div>
                                     <span class="pct">
                                         {record.votepct_choice2
-                                            ? record.votepct_choice2 + "%"
+                                            ? record.votepct_choice2.toFixed( mobile ? 1 : 0 ) + "%"
                                             : "—"}
                                     </span>
                                     <span class="count">
@@ -172,7 +183,7 @@
                                 <div>
                                     <span class="pct">
                                         {record.votepct_choice3
-                                            ? record.votepct_choice3 + "%"
+                                            ? record.votepct_choice3.toFixed( mobile ? 1 : 0 ) + "%"
                                             : "—"}
                                     </span>
                                     <span class="count">
@@ -182,13 +193,14 @@
                                     </span>
                                 </div>
                             </td>
+                            {/if}
 
                             {#if final_rank}
                                 <td class="choice">
                                     <div>
                                         <span class="pct">
                                             {record.votepct_choiceFinal
-                                                ? record.votepct_choiceFinal +
+                                                ? record.votepct_choiceFinal.toFixed( mobile ? 1 : 0 ) +
                                                   "%"
                                                 : "—"}
                                         </span>

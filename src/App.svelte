@@ -15,13 +15,15 @@
   const data_url =
     "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/latest.csv.gz";
 
-
+  let innerWidth;
+  $: mobile = innerWidth < 992 ? true : false;
 
   const loadData = async () => {
     const data = await csv(data_url);
     $sos_data = data;
     return;
   };
+
 
   $: {
     $sos_data.forEach((record) => {
@@ -37,8 +39,8 @@
       //format numbers as ints or floats
       record.votecount = parseInt(record.votecount);
       record.votepct = !record.full_name
-        ? Math.round(parseFloat(record.votepct) * 100)
-        : Math.round(parseFloat(record.votepct));
+        ? (parseFloat(record.votepct) * 100)
+        : (parseFloat(record.votepct));
       record.precinctsreporting = parseInt(record.precinctsreporting);
       record.precinctstotal = parseInt(record.precinctstotal);
     });
@@ -56,11 +58,13 @@
       });
 
   }
-  $: {
-    $sos_data.forEach((record) => {
-
-    })
-  }
+  // $: {
+  //   $sos_data.forEach((record) => {
+  //     // if (record.full_name.toLowerCase() == "yes") {
+  //       console.log(record);
+  //     // }
+  //   })
+  // }
 
   $: grouped_data = groups(
     $filter_ids.length > 0
@@ -89,6 +93,7 @@
       }
     });
 
+    //sort selected municipalities to the top
     grouped_data.sort((a,b) => {
       if (a[0] == "Minneapolis") return -1;
       if (b[0] == "Minneapolis") return 1;
@@ -101,19 +106,16 @@
     })
   }
 
- 
-
-
-
 </script>
+
+<svelte:window bind:innerWidth/>
 
 {#await loadData()}
   <p>Loading</p>
 {:then}
   <Timer {loadData} />
 
-    <OmniSearch />
-
+  <OmniSearch />
 
   <div class="section-container">
     {#each [...grouped_data] as group}
@@ -127,6 +129,7 @@
               ? [race_data[0], groupRCVRecords(race_data[1])]
               : race_data}
             {rcv}
+            {mobile}
           />
         {/each}
       </div>
