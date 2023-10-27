@@ -1,6 +1,8 @@
 <script>
     import { removeParentheticals, removeRCVOrdinal } from "./helpers";
     import { intcomma } from "journalize";
+    import { apStyleTitleCase as apCase } from "ap-style-title-case";
+
     import geodata from "./data/geometries.json";
     import DistrictLocatorMap from "./DistrictLocatorMap.svelte";
     export let race_data;
@@ -43,7 +45,8 @@
     });
 
     $: seat_name = cand_records[0].seatname;
-    $: seat_name_formatted = removeParentheticals(removeRCVOrdinal(seat_name));
+    $: seat_name_formatted = apCase(removeParentheticals(removeRCVOrdinal(seat_name)));
+
 
     $: seats_open = seat_name.match(/Elect (\d+)/)
         ? seat_name.match(/Elect (\d+)/)[1]
@@ -134,7 +137,7 @@
                             >{@html record.winner ? "&#10004&#xFE0E;" : ""}</td
                         >
            
-                        <td class="cand">{record.full_name} {(record.incumbent == "True") ? "(i)" : ""}</td>
+                        <td class="cand">{(record.full_name.toLowerCase() == "write-in" ) ? "Write-In" : record.full_name} {(record.incumbent == "True") ? "(i)" : ""}</td>
                         {#if !rcv}
                             <td class="votes">{intcomma(record.votecount)}</td>
                             <td class="pct">{record.votepct}%</td>

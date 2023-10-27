@@ -1,6 +1,5 @@
 <script>
   import { sos_data, filter_ids } from "./stores";
-  import { apStyleTitleCase as apCase } from "ap-style-title-case";
   import { groups } from "d3-array";
   import { csv } from "d3-fetch";
 
@@ -35,11 +34,6 @@
         record.cand_order = split_record[2];
       }
 
-      //format strings in AP style
-      record.full_name = apCase(record.full_name.toLowerCase());
-      record.location = apCase(record.location.toLowerCase());
-      record.seatname = apCase(record.seatname.toLowerCase());
-
       //format numbers as ints or floats
       record.votecount = parseInt(record.votecount);
       record.votepct = !record.full_name
@@ -64,13 +58,6 @@
   }
   $: {
     $sos_data.forEach((record) => {
-      // if (record.location === "Bloomington" && record.result_id.split("-")[1].substr(0,3) == "204") {
-      //   console.log(record)
-      // }
-
-        // if (record.full_name == "Chao Moua") {
-        //   console.log(record);
-        // }
 
     })
   }
@@ -115,7 +102,7 @@
   }
 
  
- 
+
 
 
 </script>
