@@ -78,6 +78,7 @@
                     .check-container {
                         padding-left: 5px;
                         padding-right: 5px;
+                        width: 25px;
                     }
                 }
 
@@ -130,6 +131,7 @@
         font-weight: bold;
         position: relative;
         top: -2px;
+        background-color: #efefef;
     }
 
     //let's move this into global styles for timer

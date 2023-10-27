@@ -8,6 +8,10 @@
 
 <script>
     import { geoMercator, geoPath } from "d3";
+    import { onMount } from 'svelte';
+
+    let g_el;
+    let viewbox = "0 0 300 300";
 
     /** @type {Object} [outline={geoJSON}] GeoJSON for geography that is outlined */
     export let outline;
@@ -42,12 +46,19 @@
     const path = geoPath()
         .projection(projection);
 
+    onMount(() => {
+        if (g_el) {
+            let bb = g_el.getBBox();
+            const y = bb.y + bb.height - height;
+            viewbox = `0 ${y} ${width} ${height}`;
 
 
+        }
+    })
 </script>
 
-<svg viewBox="0 0 {width} {height}" class={className}>
-    <g>
+<svg viewBox="{viewbox}" class={className}>
+    <g bind:this={g_el}>
         <path
             d={path(outline)}
             stroke={color}

@@ -277,7 +277,7 @@
     placeholder={"Select from dropdown or type address..."}
     inputStyles="font-family:'Benton Sans',Helvetica,sans-serif;"
     --font-size="15px"
-    --border="1px solid #999"
+    --border="1px solid #707273"
 >
     <div slot="empty">               
         {#if doingAddressSearch}
