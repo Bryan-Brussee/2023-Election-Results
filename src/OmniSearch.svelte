@@ -185,8 +185,7 @@
                         ? `${parts[0]}-${parts[1].slice(0,3)}`
                         : `${parts[0]}-${parts[1]}`
                 }
-                console.log(selected)
-                $filter_ids = $sos_data.filter(row => race_id(row.result_id) === selected.id).map(row => row["result_id"])
+                $filter_ids = $sos_data.filter(row => race_id(row.result_id) === selected.id).map(row => row["result_id"]);
             }
         }
     }
