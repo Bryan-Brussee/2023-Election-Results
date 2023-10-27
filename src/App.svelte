@@ -24,11 +24,8 @@
     return;
   };
 
-
   $: {
     $sos_data.forEach((record) => {
-
-
       if (record.full_name == "") {
         let split_record = record.result_id.split("-");
         //no real reason to split the district/county id
@@ -39,30 +36,31 @@
       //format numbers as ints or floats
       record.votecount = parseInt(record.votecount);
       record.votepct = !record.full_name
-        ? (parseFloat(record.votepct) * 100)
-        : (parseFloat(record.votepct));
+        ? parseFloat(record.votepct) * 100
+        : parseFloat(record.votepct);
       record.precinctsreporting = parseInt(record.precinctsreporting);
       record.precinctstotal = parseInt(record.precinctstotal);
     });
 
-
     $sos_data.sort((a, b) => {
+      const getResultId = (item) => item.result_id.split("-")[1].substr(0, 3);
+      const isCityOrSchool = (id) => id === "113" || id === "503";
 
-        //sorts city questions to the bottom
-        if (a.result_id.split("-")[1].substr(0,3) == "113") return 1;
-        if (b.result_id.split("-")[1].substr(0,3) == "113") return -1;
+      const aResultId = getResultId(a);
+      const bResultId = getResultId(b);
 
-        //sort school questions to the bottom
-        if (a.result_id.split("-")[1].substr(0,3) == "503") return 1;
-        if (b.result_id.split("-")[1].substr(0,3) == "503") return -1;
-      });
+      const aIsCityOrSchool = isCityOrSchool(aResultId);
+      const bIsCityOrSchool = isCityOrSchool(bResultId);
 
+      if (aIsCityOrSchool === bIsCityOrSchool) return 0;
+      return aIsCityOrSchool ? 1 : -1;
+    });
   }
 
-$: {
-  console.log($sos_data);
-  console.log($filter_ids);
-}
+  $: {
+    console.log($sos_data);
+    console.log($filter_ids);
+  }
 
   // $: {
   //   $sos_data.forEach((record) => {
@@ -100,7 +98,7 @@ $: {
     });
 
     //sort selected municipalities to the top
-    grouped_data.sort((a,b) => {
+    grouped_data.sort((a, b) => {
       if (a[0] == "Minneapolis") return -1;
       if (b[0] == "Minneapolis") return 1;
 
@@ -109,12 +107,11 @@ $: {
 
       if (a[0] == "Duluth") return -1;
       if (b[0] == "Duluth") return 1;
-    })
+    });
   }
-
 </script>
 
-<svelte:window bind:innerWidth/>
+<svelte:window bind:innerWidth />
 
 {#await loadData()}
   <p>Loading</p>
@@ -125,25 +122,23 @@ $: {
 
   <div class="section-container">
     {#each [...grouped_data] as group}
-    <section class="municipality" id={group[0]}>
-      <h2 class="municipal-name">{group[0]}</h2>
-      <div class="table-container">
-        {#each [...group[1]] as race_data (race_data[1][0]["result_id"].split("-")[0] + race_data[1][0]["result_id"].split("-")[1])}
-          {@const rcv = race_data[0].charAt(0) == "2" ? true : false}
-          <Table
-            race_data={rcv
-              ? [race_data[0], groupRCVRecords(race_data[1])]
-              : race_data}
-            {rcv}
-            {mobile}
-          />
-        {/each}
-      </div>
-    </section>
-  {/each}
-
+      <section class="municipality" id={group[0]}>
+        <h2 class="municipal-name">{group[0]}</h2>
+        <div class="table-container">
+          {#each [...group[1]] as race_data (race_data[1][0]["result_id"].split("-")[0] + race_data[1][0]["result_id"].split("-")[1])}
+            {@const rcv = race_data[0].charAt(0) == "2" ? true : false}
+            <Table
+              race_data={rcv
+                ? [race_data[0], groupRCVRecords(race_data[1])]
+                : race_data}
+              {rcv}
+              {mobile}
+            />
+          {/each}
+        </div>
+      </section>
+    {/each}
   </div>
-
 {:catch error}
   <p>{error.message}</p>
 {/await}
