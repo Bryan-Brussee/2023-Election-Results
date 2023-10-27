@@ -1,6 +1,6 @@
 <script>
     import { removeParentheticals, removeRCVOrdinal } from "./helpers";
-    import { intcomma, apnumber, capfirst } from "journalize";
+    import { intcomma } from "journalize";
     import geodata from "./data/geometries.json";
     import DistrictLocatorMap from "./DistrictLocatorMap.svelte";
     export let race_data;
@@ -33,6 +33,8 @@
         if (a.full_name > b.full_name) return 1;
         return 0;
     });
+
+
 
     $: cand_records.forEach((record) => {
         if (record.votecount_choiceFinal) {
@@ -83,13 +85,17 @@
 
 <article class="results-module">
     <header>
-        <h3 class="race-name">{seat_name_formatted}</h3>
 
-        {#if seats_open > 1}
-            <span class="seats-open interface">{seats_open} seats open</span>
-        {/if}
+        <div class="info">
+            <h3 class="race-name">{seat_name_formatted}</h3>
 
-        <div style='width:100px;'>
+            {#if seats_open > 1}
+                <span class="seats-open interface">{seats_open} seats open</span>
+            {/if}
+        </div>
+
+
+        <div class= "mini-map">
             <DistrictLocatorMap 
                 outline={geodata[location_id]} 
                 district={

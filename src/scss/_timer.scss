@@ -1,11 +1,8 @@
 #elex-dashboard {
     position: relative;
 
-
-
     .timer {
         top: 0;
-        // position: sticky;
         background-color: white;
         padding: 10px 0;
         z-index: 2;
@@ -20,9 +17,6 @@
         letter-spacing: .5px;
 
         width: 100%;
-        // width: 100vw;
-        // margin-left: -1.5rem;
-        // margin-right: -1.5rem;
 
         p {
             margin-bottom: 0;
@@ -43,13 +37,4 @@
 
 @keyframes blinker {  
     50% { opacity: 0; }
-  }
-
-  @media screen and (min-width: $desktop-sm) {
-    #elex-dashboard {
-        // .timer {
-        //     margin-left: calc((#{$desktop-sm} - 100vw) / 2);
-        //     margin-right: calc((#{$desktop-sm} - 100vw) / 2);
-        // }
-    }
   }

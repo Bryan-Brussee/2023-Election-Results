@@ -27,6 +27,7 @@
   $: {
     $sos_data.forEach((record) => {
 
+
       if (record.full_name == "") {
         let split_record = record.result_id.split("-");
         //no real reason to split the district/county id
@@ -60,6 +61,18 @@
         if (b.result_id.split("-")[1].substr(0,3) == "503") return -1;
       });
 
+  }
+  $: {
+    $sos_data.forEach((record) => {
+      // if (record.location === "Bloomington" && record.result_id.split("-")[1].substr(0,3) == "204") {
+      //   console.log(record)
+      // }
+
+        // if (record.full_name == "Chao Moua") {
+        //   console.log(record);
+        // }
+
+    })
   }
 
   $: grouped_data = groups(
@@ -120,8 +133,7 @@
     <section class="municipality" id={group[0]}>
       <h2 class="municipal-name">{group[0]}</h2>
       <div class="table-container">
-        {#each [...group[1]] as race_data}
-          <!-- Check office id and group rcv records if needed before passing data to table; pass along rcv boolean too -->
+        {#each [...group[1]] as race_data (race_data[1][0]["result_id"].split("-")[0] + race_data[1][0]["result_id"].split("-")[1])}
           {@const rcv = race_data[0].charAt(0) == "2" ? true : false}
           <Table
             race_data={rcv
