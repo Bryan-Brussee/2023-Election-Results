@@ -36,8 +36,6 @@
         return 0;
     });
 
-
-
     $: cand_records.forEach((record) => {
         if (record.votecount_choiceFinal) {
             final_rank = true;
@@ -45,8 +43,9 @@
     });
 
     $: seat_name = cand_records[0].seatname;
-    $: seat_name_formatted = apCase(removeParentheticals(removeRCVOrdinal(seat_name)));
-
+    $: seat_name_formatted = apCase(
+        removeParentheticals(removeRCVOrdinal(seat_name))
+    );
 
     $: seats_open = seat_name.match(/Elect (\d+)/)
         ? seat_name.match(/Elect (\d+)/)[1]
@@ -62,52 +61,48 @@
 
     // Map stuff
     const getWard = (officeTitle) => {
-        const wardRe = /(?:Ward|District) (\d+)/
-        const found = officeTitle.match(wardRe)
-        return found ? found[1].padStart(2, "0") : ""
-    }
+        const wardRe = /(?:Ward|District) (\d+)/;
+        const found = officeTitle.match(wardRe);
+        return found ? found[1].padStart(2, "0") : "";
+    };
 
     const filterDistrict = (geojson, subdistrict) => {
         return {
             type: "FeatureCollection",
             features: geojson.features.filter(
-                (f) =>
-                    f.properties.district === subdistrict
+                (f) => f.properties.district === subdistrict
             ),
         };
     };
 
-    const location_id = race_data[1][0]["result_id"].split("-")[0]
-    const subdistrict = race_data[1][0]["results_group"] === "cntyRaceQuestions"
-        ? race_data[1][0]["district"]
-        : getWard(race_data[1][0]["seatname"]) !== ""
-        ? getWard(race_data[1][0]["seatname"])
-        : undefined
-    
+    const location_id = race_data[1][0]["result_id"].split("-")[0];
+    const subdistrict =
+        race_data[1][0]["results_group"] === "cntyRaceQuestions"
+            ? race_data[1][0]["district"]
+            : getWard(race_data[1][0]["seatname"]) !== ""
+            ? getWard(race_data[1][0]["seatname"])
+            : undefined;
 </script>
 
 <article class="results-module">
     <header>
-
         <div class="info">
             <h3 class="race-name">{seat_name_formatted}</h3>
 
             {#if seats_open > 1}
-                <span class="seats-open interface">{seats_open} seats open</span>
+                <span class="seats-open interface">{seats_open} seats open</span
+                >
             {/if}
         </div>
 
-
-        <div class= "mini-map">
+        <div class="mini-map">
             {#if subdistrict}
-            <DistrictLocatorMap 
-                outline={geodata[location_id]} 
-                district={
-                    subdistrict 
-                    ? filterDistrict(geodata[location_id], subdistrict)
-                    : geodata[location_id]
-                } 
-            />
+                <DistrictLocatorMap
+                    outline={geodata[location_id]}
+                    district={subdistrict
+                        ? filterDistrict(geodata[location_id], subdistrict)
+                        : geodata[location_id]}
+                />
             {/if}
         </div>
     </header>
@@ -136,8 +131,11 @@
                         <td class="check-container"
                             >{@html record.winner ? "&#10004&#xFE0E;" : ""}</td
                         >
-           
-                        <td class="cand">{(record.full_name.toLowerCase() == "write-in" ) ? "Write-In" : record.full_name} {(record.incumbent == "True") ? "(i)" : ""}</td>
+
+                        <td class="cand">
+                            {(/yes|no|write-in/.test(record.full_name.toLowerCase())) ? apCase(record.full_name.toLowerCase()) : record.full_name}
+                            {record.incumbent == "True" ? "(i)" : ""}
+                        </td>
                         {#if !rcv}
                             <td class="votes">{intcomma(record.votecount)}</td>
                             <td class="pct">{record.votepct}%</td>
