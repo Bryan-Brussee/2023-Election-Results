@@ -96,6 +96,7 @@
 
 
         <div class= "mini-map">
+            {#if subdistrict}
             <DistrictLocatorMap 
                 outline={geodata[location_id]} 
                 district={
@@ -104,6 +105,7 @@
                     : geodata[location_id]
                 } 
             />
+            {/if}
         </div>
     </header>
 
