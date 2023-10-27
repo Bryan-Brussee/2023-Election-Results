@@ -97,7 +97,9 @@
         })
         .map(o => {
             const fullId = $sos_data.filter(row => row["seatname"] == o)[0].result_id.split("-");
-            const officeId = `${fullId[0]}-${fullId[1]}`
+            const officeId = fullId[1].charAt(0) === "2" 
+                ? `${fullId[0]}-${fullId[1].slice(0,3)}`
+                : `${fullId[0]}-${fullId[1]}`
             const results_group = $sos_data.filter(row => row["seatname"] == o)[0].results_group
             const append  = results_group === "SDRaceQuestions" ?
                                 " School District" :
@@ -117,7 +119,7 @@
         return items;
     }
 
-
+ 
 
     // Override default svelte-select filter function to use minisearch instead
     function filter({
@@ -179,8 +181,11 @@
             } else {
                 const race_id = (result_id) => {
                     const parts = result_id.split("-")
-                    return `${parts[0]}-${parts[1]}`
+                    return parts[1].charAt(0) === "2"
+                        ? `${parts[0]}-${parts[1].slice(0,3)}`
+                        : `${parts[0]}-${parts[1]}`
                 }
+                console.log(selected)
                 $filter_ids = $sos_data.filter(row => race_id(row.result_id) === selected.id).map(row => row["result_id"])
             }
         }
@@ -263,7 +268,12 @@
     bind:filterText
     groupBy={(item) => item.location}
     groupHeaderSelectable
-    on:clear={()=>{currentItems=locationsAndRaces}}
+    on:clear={()=> {
+        currentItems=locationsAndRaces; 
+        $filter_ids=[]; 
+        selected=undefined;
+        }
+    }
     hideEmptyState={doingAddressSearch && filterText.length < 8}
     placeholder={"Select from dropdown or type address..."}
     inputStyles="font-family:'Benton Sans',Helvetica,sans-serif;"
