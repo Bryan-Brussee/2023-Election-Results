@@ -4,6 +4,7 @@
     import { apStyleTitleCase as apCase } from "ap-style-title-case";
 
     import questions from "./data/questions.json";
+    import ward_descriptions from "./data/ward-descriptions.json";
 
     import geodata from "./data/geometries.json";
     import DistrictLocatorMap from "./DistrictLocatorMap.svelte";
@@ -63,14 +64,15 @@
             100
     );
 
-    $: question_table = /113|503/.test(
-        cand_records[0].result_id.split("-")[1].substr(0, 3)
-    ) || cand_records[0].result_id.split("-")[1] == "0421";
+    $: question_table =
+        /113|503/.test(cand_records[0].result_id.split("-")[1].substr(0, 3)) ||
+        cand_records[0].result_id.split("-")[1] == "0421";
     $: st_paul_race = cand_records[0].result_id.split("-")[0] === "58000";
     $: question_copy = question_table
         ? questions[cand_records[0].result_id.replace(/-[^-]*$/, "")]
               .question_body
         : "";
+
 
     let candidates_expanded = false;
     let question_expanded = false;
@@ -102,10 +104,9 @@
 
 <article class="results-module">
     <header class:question_expanded>
-
         <div class="flex-container">
             <div class="office-name">
-                <h3>{seat_name_formatted}</h3>
+                <h3>{seat_name_formatted} {cand_records[0].result_id}</h3>
                 {#if seats_open > 1}
                     <span class="seats-open interface"
                         >{seats_open} seats open</span
@@ -125,27 +126,28 @@
             {/if}
         </div>
         {#if question_table}
-        <div class="question-container">
-            <p>
-                {question_expanded
-                    ? question_copy
-                    : question_copy.split(" ").slice(0, mobile ? 12 : 25).join(" ") + "..."}
-                                <button
-                                on:click={() => {
-                                    question_expanded = !question_expanded;
-                                }}
-                                >{question_expanded
-                                    ? "Hide full text"
-                                    : "Show full text"}</button
-                            >
-
-            </p>
-
-          
-        </div>
-           
+            <div class="question-container">
+                <p>
+                    {question_expanded
+                        ? question_copy
+                        : question_copy
+                              .split(" ")
+                              .slice(0, mobile ? 12 : 25)
+                              .join(" ") + "..."}
+                    <button
+                        on:click={() => {
+                            question_expanded = !question_expanded;
+                        }}
+                        >{question_expanded
+                            ? "Hide full text"
+                            : "Show full text"}</button
+                    >
+                </p>
+            </div>
         {/if}
-
+        <!-- {#if ward_description}
+            <p>{ward_description}</p>
+        {/if} -->
     </header>
 
     <table class="results-table" class:rcv>
@@ -171,14 +173,11 @@
                 {#if candidates_expanded || i < 5}
                     <tr class:winner={record.winner}>
                         <!-- check container -->
-                        <td class="check-container"
-                            >{@html record.winner ? "&#10004&#xFE0E;" : ""}</td
-                        >
+                        <td class="check-container">
+                            {@html record.winner ? "&#10004&#xFE0E;" : ""}
+                        </td>
 
-                        <td class="cand">
-                            {(/yes|no|write-in/.test(
-                                record.full_name.toLowerCase()
-                            ))
+                        <td class="cand">{(/yes|no|write-in/.test(record.full_name.toLowerCase()))
                                 ? apCase(record.full_name.toLowerCase())
                                 : record.full_name}
                             {record.incumbent == "True" ? "(i)" : ""}
