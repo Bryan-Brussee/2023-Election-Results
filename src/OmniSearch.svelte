@@ -218,7 +218,7 @@
         const schoolRaces = $sos_data.filter(row => (
             row["results_group"] == "SDRaceQuestions" &&
             row["district"] == schoolData[0].padStart(4, "0") &&
-            ["00", schoolData[1]].includes(getWard(row["seatname"]))
+            ["", schoolData[1].padStart(2, "0")].includes(getWard(row["seatname"]))
         ));
 
         $filter_ids = [...countyRaces, ...muniRaces, ...schoolRaces].map(r => r.result_id);
