@@ -1,0 +1,32 @@
+{
+    "duluth": {
+        "City Council — District 1": "Council District 1 includes most of eastern Duluth, including Lakeside, Lester Park, North Shore, Woodland, Morley Heights and Hunters Park neighborhoods.",
+        "City Council — District 3": "Council District 3 covers the center of the city, including part of Central Hillside, downtown, Park Point and East Hillside.",
+        "City Council — District 4": "Council District 4 includes part of western and northern Duluth, including Duluth Heights, Piedmont Heights, Lincoln Park and some of Central Hillside.",
+        "City Council — District 5": "Council District 5 lies in western Duluth and includes Fond du Lac, Gary-New Duluth, Morgan Park, Riverside, Norton Park, Fairmount, Irving, Bayview Heights, Cody and Denfeld neighborhoods."
+    },
+    "minneapolis": {
+        "City Council — Ward 1": "The First Ward lies in the northeast corner of the city. It includes Audubon Park, Bottineau,Columbia Park, Como, Holland, Logan Park, Marshall Terrace, Mid-City Industrial, Northeast Park, Waite Park and Windom Park.",
+        "City Council — Ward 2": "The Second Ward stretches across the Mississippi River, on the eastern side of the city. Neighborhoods in this ward include Cedar Riverside, Como, Marcy Holmes, Prospect Park - East River Road, Seward and the University of Minnesota.",
+        "City Council — Ward 3": "The Third Ward stretches from downtown north across the Mississippi River. Neighborhoods in this ward are: Beltrami, Como, Downtown East, Downtown West, Marcy Holmes, Nicollet Island - East Bank, North Loop, Sheridan, St. Anthony East and St. Anthony West.",
+        "City Council — Ward 4": "The Fourth Ward covers the northwest corner of the city. The Mississippi Rivers serves as its eastern border. Neighborhoods in this ward are: Camden Industrial Area, Cleveland, Folwell, Humboldt Industrial Area, Jordan, Lind-Bohanon, McKinley, Shingle Creek, Victory, Webber-Camden and Willard-Hay.",
+        "City Council — Ward 5": "The Fifth Ward also covers parts of northern Minneapolis. Its neighborhoods include Harrison, Hawthorne, Jordan, Near-North, North Loop, Sumner-Glenwood and Willard-Hay.",
+        "City Council — Ward 6": "The Sixth Ward covers areas south and east of downtown, including Cedar Riverside, Elliot Park, Phillips West, Seward, Steven's Square-Loring Heights and Ventura Village.",
+        "City Council — Ward 7": "The Seventh Ward covers parts of downtown then stretches west. Its neighborhoods include Bryn-Mawr, Cedar-Isles-Dean, Downtown West, East Isles, Kenwood, Linden Hills, Loring Park, Lowry Hill, Steven's Square-Loring Heights and West Maka Ska.",
+        "City Council — Ward 8": "The Eighth Ward covers south-central Minneapolis, including the intersection of 38th Street and Chicago Avenue, where George Floyd was killed. This ward encompasses the Bancroft, Bryant, Central, Field, King Field, Lyndale, Northrop and Regina neighborhoods.",
+        "City Council — Ward 9": "The Ninth Ward also covers central Minneapolis and also includes the intersection of 38th and Chicago where George Floyd was killed. Its neighborhoods include Central, Corcoran, East Phillips, Howe, Longfellow and Powderhorn Park.",
+        "City Council — Ward 10": "The Tenth Ward covers an area commonly referred to as Uptown. Its neighborhoods include East Bde Maka Ska, East Harriet, East Isles, Lowry Hill East, South Uptown and Whittier.",
+        "City Council — Ward 11": "The Eleventh Ward covers south-central Minneapolis. Its neighborhoods include Diamond Lake, Field, Hale, Keewaydin, Northrop, Page, Tangletown, Wenonah and Windom.",
+        "City Council — Ward 12": "The Twelfth Ward covers the southeastern corner of the city, including Cooper, Ericsson, Hiawatha , Howe, Keewaydin, Minnehaha, Morris Park and Standish.",
+        "City Council — Ward 13": "The Thirteenth Ward covers the southwestern corner of Minneapolis. Its neighborhoods include Armatage, East Harriet, Fulton, Kenny, Linden Hills and Lynnhurst."
+    },
+    "stpaul": {
+        "City Council — Ward 1": "The First Ward sits in the middle of the city, encompassing the Frogtown and Summit-University neighborhoods. The ward stretches west to cover a swath of the Union Park neighborhood, and north into a portion of the North End neighborhood.",
+        "City Council — Ward 2": "The Mississippi River runs through the Second Ward, which includes downtown and Lowertown, as well as the West Side, W. 7th and Summit Hill neighborhoods.",
+        "City Council — Ward 3": "Located in the southwest corner of the city, the Third Ward encompasses the Highland Park neighborhood and most of the Macalester-Groveland neighborhood.",
+        "City Council — Ward 4": "In the northwest corner of the city, the Fourth Ward covers the Hamline-Midway, Merriam Park and St. Anthony Park neighborhoods, as well as parts of Macalester-Groveland and Como.",
+        "City Council — Ward 5": "The Fifth Ward includes most of the Como and North End neighborhoods, plus parts of Payne-Phalen.",
+        "City Council — Ward 6": "Covering the northern part of St. Paul’s East Side, the Sixth Ward includes parts of the Payne-Phalen, Frost Lake, Hayden Heights, Hazel Park, Phalen Village and Prosperity neighborhoods.",
+        "City Council — Ward 7": "On the southern portion of the East Side, the Seventh Ward covers Dayton’s Bluff, Mounds Park, Swede Hollow, Battle Creek, Highwood, Conway and Eastview."
+    }
+}

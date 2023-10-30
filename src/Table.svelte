@@ -3,6 +3,8 @@
     import { intcomma } from "journalize";
     import { apStyleTitleCase as apCase } from "ap-style-title-case";
 
+    import questions from "./data/questions.json";
+
     import geodata from "./data/geometries.json";
     import DistrictLocatorMap from "./DistrictLocatorMap.svelte";
     export let race_data;
@@ -12,7 +14,6 @@
     let final_rank = false;
 
     $: cand_records = race_data[1].sort((a, b) => {
-
         //if we have winners, sort them to the top
         if (a.winner && !b.winner) return -1;
         if (!a.winner && b.winner) return 1;
@@ -62,10 +63,17 @@
             100
     );
 
-    $: question_table = /113|503/.test(cand_records[0].result_id.split("-")[1].substr(0,3));
+    $: question_table = /113|503/.test(
+        cand_records[0].result_id.split("-")[1].substr(0, 3)
+    ) || cand_records[0].result_id.split("-")[1] == "0421";
     $: st_paul_race = cand_records[0].result_id.split("-")[0] === "58000";
+    $: question_copy = question_table
+        ? questions[cand_records[0].result_id.replace(/-[^-]*$/, "")]
+              .question_body
+        : "";
 
     let candidates_expanded = false;
+    let question_expanded = false;
 
     // Map stuff
     const getWard = (officeTitle) => {
@@ -93,26 +101,51 @@
 </script>
 
 <article class="results-module">
-    <header>
-        <div class="info">
-            <h3 class="race-name">{seat_name_formatted}</h3>
+    <header class:question_expanded>
 
-            {#if seats_open > 1}
-                <span class="seats-open interface">{seats_open} seats open</span
-                >
-            {/if}
-        </div>
+        <div class="flex-container">
+            <div class="office-name">
+                <h3>{seat_name_formatted}</h3>
+                {#if seats_open > 1}
+                    <span class="seats-open interface"
+                        >{seats_open} seats open</span
+                    >
+                {/if}
+            </div>
 
-        <div class="mini-map">
             {#if subdistrict}
-                <DistrictLocatorMap
-                    outline={geodata[location_id]}
-                    district={subdistrict
-                        ? filterDistrict(geodata[location_id], subdistrict)
-                        : geodata[location_id]}
-                />
+                <div class="mini-map">
+                    <DistrictLocatorMap
+                        outline={geodata[location_id]}
+                        district={subdistrict
+                            ? filterDistrict(geodata[location_id], subdistrict)
+                            : geodata[location_id]}
+                    />
+                </div>
             {/if}
         </div>
+        {#if question_table}
+        <div class="question-container">
+            <p>
+                {question_expanded
+                    ? question_copy
+                    : question_copy.split(" ").slice(0, mobile ? 12 : 8).join(" ") + "..."}
+                                <button
+                                on:click={() => {
+                                    question_expanded = !question_expanded;
+                                }}
+                                >{question_expanded
+                                    ? "Hide full text"
+                                    : "Show full text"}</button
+                            >
+
+            </p>
+
+          
+        </div>
+           
+        {/if}
+
     </header>
 
     <table class="results-table" class:rcv>
@@ -125,8 +158,8 @@
             {:else}
                 <th class="choice">First<br />choice</th>
                 {#if !st_paul_race}
-                <th class="choice">Second<br />choice</th>
-                <th class="choice">Third<br />choice</th>
+                    <th class="choice">Second<br />choice</th>
+                    <th class="choice">Third<br />choice</th>
                 {/if}
                 {#if final_rank}
                     <th class="choice">Final<br />round</th>
@@ -143,7 +176,11 @@
                         >
 
                         <td class="cand">
-                            {(/yes|no|write-in/.test(record.full_name.toLowerCase())) ? apCase(record.full_name.toLowerCase()) : record.full_name}
+                            {(/yes|no|write-in/.test(
+                                record.full_name.toLowerCase()
+                            ))
+                                ? apCase(record.full_name.toLowerCase())
+                                : record.full_name}
                             {record.incumbent == "True" ? "(i)" : ""}
                         </td>
                         {#if !rcv}
@@ -154,7 +191,9 @@
                                 <div>
                                     <span class="pct">
                                         {record.votepct_choice1
-                                            ? record.votepct_choice1.toFixed( mobile ? 1 : 0 ) + "%"
+                                            ? record.votepct_choice1.toFixed(
+                                                  mobile ? 1 : 0
+                                              ) + "%"
                                             : "—"}
                                     </span>
                                     <span class="count">
@@ -165,34 +204,42 @@
                                 </div></td
                             >
                             {#if !st_paul_race}
-                            <td class="choice">
-                                <div>
-                                    <span class="pct">
-                                        {record.votepct_choice2
-                                            ? record.votepct_choice2.toFixed( mobile ? 1 : 0 ) + "%"
-                                            : "—"}
-                                    </span>
-                                    <span class="count">
-                                        {record.votecount_choice2
-                                            ? intcomma(record.votecount_choice2)
-                                            : ""}
-                                    </span>
-                                </div>
-                            </td>
-                            <td class="choice">
-                                <div>
-                                    <span class="pct">
-                                        {record.votepct_choice3
-                                            ? record.votepct_choice3.toFixed( mobile ? 1 : 0 ) + "%"
-                                            : "—"}
-                                    </span>
-                                    <span class="count">
-                                        {record.votecount_choice3
-                                            ? intcomma(record.votecount_choice3)
-                                            : ""}
-                                    </span>
-                                </div>
-                            </td>
+                                <td class="choice">
+                                    <div>
+                                        <span class="pct">
+                                            {record.votepct_choice2
+                                                ? record.votepct_choice2.toFixed(
+                                                      mobile ? 1 : 0
+                                                  ) + "%"
+                                                : "—"}
+                                        </span>
+                                        <span class="count">
+                                            {record.votecount_choice2
+                                                ? intcomma(
+                                                      record.votecount_choice2
+                                                  )
+                                                : ""}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="choice">
+                                    <div>
+                                        <span class="pct">
+                                            {record.votepct_choice3
+                                                ? record.votepct_choice3.toFixed(
+                                                      mobile ? 1 : 0
+                                                  ) + "%"
+                                                : "—"}
+                                        </span>
+                                        <span class="count">
+                                            {record.votecount_choice3
+                                                ? intcomma(
+                                                      record.votecount_choice3
+                                                  )
+                                                : ""}
+                                        </span>
+                                    </div>
+                                </td>
                             {/if}
 
                             {#if final_rank}
@@ -200,8 +247,9 @@
                                     <div>
                                         <span class="pct">
                                             {record.votepct_choiceFinal
-                                                ? record.votepct_choiceFinal.toFixed( mobile ? 1 : 0 ) +
-                                                  "%"
+                                                ? record.votepct_choiceFinal.toFixed(
+                                                      mobile ? 1 : 0
+                                                  ) + "%"
                                                 : "—"}
                                         </span>
                                         <span class="count">
