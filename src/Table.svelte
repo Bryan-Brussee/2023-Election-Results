@@ -153,7 +153,7 @@
                         ? question_copy
                         : question_copy
                               .split(" ")
-                              .slice(0, mobile ? 12 : 25)
+                              .slice(0, mobile ? 12 : 16)
                               .join(" ") + "..."}
                     <button
                         on:click={() => {
