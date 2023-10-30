@@ -73,9 +73,14 @@
               .question_body
         : "";
 
+    $: muni_id = cand_records[0].result_id.split("-")[0];
+    $: office_id = cand_records[0].result_id.split("-")[1];
+
+    $: ward_description = ward_descriptions[muni_id]?.[office_id];
 
     let candidates_expanded = false;
     let question_expanded = false;
+    let wards_expanded = false;
 
     // Map stuff
     const getWard = (officeTitle) => {
@@ -103,15 +108,31 @@
 </script>
 
 <article class="results-module">
-    <header class:question_expanded>
+    <header class:expanded={question_expanded || wards_expanded} >
         <div class="flex-container">
             <div class="office-name">
-                <h3>{seat_name_formatted} {cand_records[0].result_id}</h3>
+                <h3>{seat_name_formatted}</h3>
                 {#if seats_open > 1}
                     <span class="seats-open interface"
                         >{seats_open} seats open</span
                     >
                 {/if}
+
+                        {#if ward_description}
+        <div class="wards-container">
+            <p>{wards_expanded ?
+                ward_description :
+                ward_description.split(" ").slice(0, mobile ? 10 : 15).join(" ") + " ..."}
+                <button
+                on:click={() => {
+                    wards_expanded = !wards_expanded;
+                }}
+                >{wards_expanded
+                    ? "Hide full text"
+                    : "Show full text"}</button
+            ></p>
+        </div>
+        {/if}
             </div>
 
             {#if subdistrict}
@@ -145,9 +166,7 @@
                 </p>
             </div>
         {/if}
-        <!-- {#if ward_description}
-            <p>{ward_description}</p>
-        {/if} -->
+
     </header>
 
     <table class="results-table" class:rcv>
