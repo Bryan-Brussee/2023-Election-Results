@@ -3,11 +3,11 @@
     margin-bottom: 42px;
 
     header {
-        margin-bottom: 12px;
         display: flex;
         flex-direction: column;
         justify-content: end;
         height: 80px;
+        margin-bottom: 12px;
 
         &.question_expanded {
             height: auto;
@@ -17,8 +17,6 @@
             display: flex;
             align-items: end;
             justify-content: space-between;
-            margin-bottom: 12px;
-
 
 
             .office-name {
@@ -49,7 +47,7 @@
             p {
                 font-family: Benton Sans, Helvetica, Arial, sans-serif;
                 margin-bottom: 0;
-                font-size: 15px;
+                font-size: 14px;
             }
 
             button {

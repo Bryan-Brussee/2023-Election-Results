@@ -129,7 +129,7 @@
             <p>
                 {question_expanded
                     ? question_copy
-                    : question_copy.split(" ").slice(0, mobile ? 12 : 8).join(" ") + "..."}
+                    : question_copy.split(" ").slice(0, mobile ? 12 : 25).join(" ") + "..."}
                                 <button
                                 on:click={() => {
                                     question_expanded = !question_expanded;

@@ -50,7 +50,7 @@
         if (g_el) {
             let bb = g_el.getBBox();
             const y = bb.y + bb.height - height;
-            viewbox = `0 ${y} ${width} ${height}`;
+            viewbox = `0 ${y} ${width + 5} ${height + 5}`;
 
 
         }
