@@ -177,7 +177,7 @@
             }
         } else {
             if (selected.groupHeader) {
-                $filter_ids = $sos_data.filter(row => row["location"] === selected.value).map(row => row["result_id"])
+                $filter_ids = $sos_data.filter(row => row["location"] === selected.value.replace(' School District','')).map(row => row["result_id"])
             } else {
                 const race_id = (result_id) => {
                     const parts = result_id.split("-")
