@@ -176,6 +176,7 @@
                 $filter_ids = []
             }
         } else {
+            activeAddress = undefined;
             if (selected.groupHeader) {
                 $filter_ids = $sos_data.filter(row => row["location"] === selected.value.replace(' School District','')).map(row => row["result_id"])
             } else {
@@ -222,6 +223,9 @@
         ));
 
         $filter_ids = [...countyRaces, ...muniRaces, ...schoolRaces].map(r => r.result_id);
+        if ($filter_ids.length === 0) {
+            $filter_ids = ["xxxx"]
+        }
 
     }
 
@@ -278,30 +282,35 @@
     inputStyles="font-family:'Benton Sans',Helvetica,sans-serif;"
     --font-size="16px"
     --border="1px solid #707273"
->
-    <div slot="empty">               
-        {#if doingAddressSearch}
-            Address not found.
-        {:else}
-            No office or location found.
-        {/if}
-    </div>
-</Select>
+    >
+        <div slot="empty">               
+            {#if doingAddressSearch}
+                Address not found.
+            {:else}
+                No office or location found.
+            {/if}
+        </div>
+    </Select>
 </div>
 
 <div id="omnisearch-status">
-    {#if selected && $filter_ids.length > 0}
+    {#if selected && $filter_ids.length > 0 && $filter_ids[0] !== "xxxx"}
         Showing results for
         {#if selected.houseNumber || selected.groupHeader}
             <span>{selected.label}</span>
         {:else}
             <span>{selected.label} ({selected.location})</span>
         {/if}
-        <button on:click={()=>{$filter_ids=[]; filterText="";selected=undefined}}>Show all</button>
+        <button on:click={()=>{$filter_ids=[]; filterText=""; selected=undefined}}>Show all</button>
     {/if}
-    {#if selected && $filter_ids.length === 0}
+    {#if selected && $filter_ids[0] === "xxxx"}
         No elections found for the address {selected.label}. 
-        <button on:click={()=>{filterText="";selected=undefined}}>Clear search</button>
+        <button on:click={()=>{
+            $filter_ids=[]; 
+            filterText=""; 
+            selected=undefined; 
+            activeAddress=undefined
+        }}>Clear search</button>
     {/if}
 </div>
 
