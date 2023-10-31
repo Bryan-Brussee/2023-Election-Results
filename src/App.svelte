@@ -37,6 +37,8 @@
         record.cand_order = split_id[2];
       }
 
+      (record.location) == "St Louis Park" ? record.location = "St. Louis Park" : record.location = record.location;
+
       //format numbers as ints or floats
       record.votecount = parseInt(record.votecount);
       record.votepct = !record.full_name
@@ -99,6 +101,14 @@
       if (a[0] == "Duluth") return -1;
       if (b[0] == "Duluth") return 1;
     });
+  }
+
+  $: {
+    $sos_data.forEach(record => {
+      // if (record.location === "Rochester") {
+        console.log(record)
+      // }
+    })
   }
 
 </script>
