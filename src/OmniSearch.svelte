@@ -250,6 +250,13 @@
         }
     };
 
+    const clearAll = () => {
+        $filter_ids=[]; 
+        filterText=""; 
+        selected=undefined; 
+        activeAddress=undefined;
+    }
+
     // Ensure locationsAndRaces updates after $sos_data first resolves
     $: locationsAndRaces = getLocationsAndRaces($sos_data);
 
@@ -271,12 +278,7 @@
     bind:filterText
     groupBy={(item) => item.location}
     groupHeaderSelectable
-    on:clear={()=> {
-        currentItems=locationsAndRaces; 
-        $filter_ids=[]; 
-        selected=undefined;
-        }
-    }
+    on:clear={clearAll}
     hideEmptyState={doingAddressSearch && filterText.length < 8}
     placeholder={"Select from dropdown or type address..."}
     inputStyles="font-family:'Benton Sans',Helvetica,sans-serif;"
@@ -301,16 +303,11 @@
         {:else}
             <span>{selected.label} ({selected.location})</span>
         {/if}
-        <button on:click={()=>{$filter_ids=[]; filterText=""; selected=undefined}}>Show all</button>
+        <button on:click={clearAll}>Show all</button>
     {/if}
     {#if selected && $filter_ids[0] === "xxxx"}
         No elections found for the address {selected.label}. 
-        <button on:click={()=>{
-            $filter_ids=[]; 
-            filterText=""; 
-            selected=undefined; 
-            activeAddress=undefined
-        }}>Clear search</button>
+        <button on:click={clearAll}>Clear search</button>
     {/if}
 </div>
 
