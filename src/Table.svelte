@@ -122,9 +122,9 @@
 
                         {#if ward_description}
         <div class="wards-container">
-            <p>{wards_expanded ?
-                ward_description :
-                ward_description.split(" ").slice(0, mobile ? 10 : 15).join(" ") + " ..."}
+            <p>{@html wards_expanded ?
+                ward_description + "&nbsp;"  :
+                ward_description.split(" ").slice(0, mobile ? 10 : 15).join(" ") + " ...&nbsp;"}
                 <button
                 on:click={() => {
                     wards_expanded = !wards_expanded;
@@ -151,12 +151,13 @@
         {#if question_copy}
             <div class="question-container">
                 <p>
-                    {question_expanded
-                        ? question_copy
+                    {@html question_expanded || question_copy.split(" ").length <= (mobile ? 12 : 16)
+                        ? question_copy + "&nbsp;"
                         : question_copy
                               .split(" ")
                               .slice(0, mobile ? 12 : 16)
-                              .join(" ") + "..."}
+                              .join(" ") + " ...&nbsp;"}
+                    {#if question_copy.split(" ").length > (mobile ? 12 : 16)}
                     <button
                         on:click={() => {
                             question_expanded = !question_expanded;
@@ -165,6 +166,7 @@
                             ? "Hide full text"
                             : "Show full text"}</button
                     >
+                    {/if}
                 </p>
             </div>
         {/if}
