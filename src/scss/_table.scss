@@ -80,8 +80,6 @@
 
     }
 
-
-
     .results-table {
         width: 100%;
         font-family: 'Benton Sans', Helvetica, sans-serif;
@@ -167,7 +165,6 @@
         td.cand {
             line-height: 1.3;
         }
-
     }
 
     button.expand {
@@ -262,6 +259,10 @@
                     flex-direction: row;
                     align-items: baseline;
                     justify-content: space-evenly;
+
+                    &.empty {
+                        justify-content: end;
+                    }
                 }
 
                 span {
@@ -281,6 +282,12 @@
                     }
                 }
             }
+
+        &.no_results {
+            tbody tr td.choice >div {
+                justify-content: end;
+            }
+        }
         }
     }
 

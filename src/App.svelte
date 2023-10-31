@@ -12,10 +12,13 @@
   import Timer from "./Timer.svelte";
   import OmniSearch from "./OmniSearch.svelte";
 
-  const data_url =
-    "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/latest.csv.gz";
+  // const data_url =
+  //   "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/latest.csv.gz";
+
+  const data_url = "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/versions/results-20231027160545.csv.gz"
 
   let innerWidth;
+  
   $: mobile = innerWidth < 992 ? true : false;
 
   const loadData = async () => {
@@ -27,10 +30,10 @@
   $: {
     $sos_data.forEach((record) => {
       if (record.full_name == "") {
-        let split_record = record.result_id.split("-");
-        //no real reason to split the district/county id
-        record.office_id = split_record[1];
-        record.cand_order = split_record[2];
+        let split_id = record.result_id.split("-");
+        split_id[0].length == 2 ? record.county_id = split_id[0] : record.district = split_id[0]
+        record.office_id = split_id[1];
+        record.cand_order = split_id[2];
       }
 
       //format numbers as ints or floats
@@ -65,9 +68,9 @@
     (d) => d.result_id.split("-")[0],
     //and then group by race equivalent substring of ID. For RCV, whichs always appears to start with '2', drops last character
     (d) =>
-      d.result_id.split("-")[1].charAt(0) == "2"
-        ? d.result_id.split("-")[1].slice(0, -1)
-        : d.result_id.split("-")[1]
+        d.office_id.charAt(0) == "2"
+          ? d.office_id.slice(0, -1)
+          : d.office_id
   );
 
   //reference our location id against lookup table
@@ -96,6 +99,7 @@
       if (b[0] == "Duluth") return 1;
     });
   }
+
 </script>
 
 <svelte:window bind:innerWidth />

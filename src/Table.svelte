@@ -43,11 +43,21 @@
         return 0;
     });
 
+    let no_results = true;
+
     $: cand_records.forEach((record) => {
         if (record.votecount_choiceFinal) {
             final_rank = true;
         }
+        if (record.votecount > 0) {
+            no_results = false;
+        }
     });
+
+    $: district_id = cand_records[0].district;
+    $: county_id = cand_records[0].county_id;
+    $: office_id = cand_records[0].office_id;
+
 
     $: seat_name = cand_records[0].seatname;
     $: seat_name_formatted = apCase(
@@ -64,19 +74,11 @@
             100
     );
 
-    $: question_table =
-        /113|503/.test(cand_records[0].result_id.split("-")[1].substr(0, 3)) ||
-        cand_records[0].result_id.split("-")[1] == "0421";
-    $: st_paul_race = cand_records[0].result_id.split("-")[0] === "58000";
-    $: question_copy = question_table
-        ? questions[cand_records[0].result_id.replace(/-[^-]*$/, "")]
-              .question_body
-        : "";
+    $: question_table = /113|503/.test(office_id.substr(0, 3)) || office_id == "0421";
+    $: st_paul_race = cand_records[0].district === "58000";
+    $: question_copy = questions[`${district_id}-${office_id}`]?.question_body;
 
-    $: muni_id = cand_records[0].result_id.split("-")[0];
-    $: office_id = cand_records[0].result_id.split("-")[1];
-
-    $: ward_description = ward_descriptions[muni_id]?.[office_id];
+    $: ward_description = ward_descriptions[district_id]?.[office_id];
 
     let candidates_expanded = false;
     let question_expanded = false;
@@ -146,7 +148,7 @@
                 </div>
             {/if}
         </div>
-        {#if question_table}
+        {#if question_copy}
             <div class="question-container">
                 <p>
                     {question_expanded
@@ -169,7 +171,7 @@
 
     </header>
 
-    <table class="results-table" class:rcv>
+    <table class="results-table" class:rcv class:no_results>
         <thead>
             <th class="check-container" />
             <th class="cand">{question_table ? "Choice" : "Candidate"}</th>
@@ -202,22 +204,16 @@
                             {record.incumbent == "True" ? "(i)" : ""}
                         </td>
                         {#if !rcv}
-                            <td class="votes">{intcomma(record.votecount)}</td>
-                            <td class="pct">{record.votepct.toFixed(1)}%</td>
+                            <td class="votes">{ no_results ? "—" : intcomma(record.votecount)}</td>
+                            <td class="pct">{no_results ? "—" : `${record.votepct.toFixed(1)}%`}</td>
                         {:else}
                             <td class="choice">
                                 <div>
                                     <span class="pct">
-                                        {record.votepct_choice1
-                                            ? record.votepct_choice1.toFixed(
-                                                  mobile ? 1 : 0
-                                              ) + "%"
-                                            : "—"}
+                                        {no_results ? "—" : `${record.votepct_choice1.toFixed(mobile ? 1 : 0)}%`}
                                     </span>
                                     <span class="count">
-                                        {record.votecount_choice1
-                                            ? intcomma(record.votecount_choice1)
-                                            : ""}
+                                        {no_results ? "" : intcomma(record.votecount_choice1)}
                                     </span>
                                 </div></td
                             >
@@ -225,36 +221,20 @@
                                 <td class="choice">
                                     <div>
                                         <span class="pct">
-                                            {record.votepct_choice2
-                                                ? record.votepct_choice2.toFixed(
-                                                      mobile ? 1 : 0
-                                                  ) + "%"
-                                                : "—"}
+                                            {no_results ? "—" : `${record.votepct_choice2.toFixed(mobile ? 1 : 0)}%`}
                                         </span>
                                         <span class="count">
-                                            {record.votecount_choice2
-                                                ? intcomma(
-                                                      record.votecount_choice2
-                                                  )
-                                                : ""}
+                                            {no_results ? "" : intcomma(record.votecount_choice2)}
                                         </span>
                                     </div>
                                 </td>
                                 <td class="choice">
                                     <div>
                                         <span class="pct">
-                                            {record.votepct_choice3
-                                                ? record.votepct_choice3.toFixed(
-                                                      mobile ? 1 : 0
-                                                  ) + "%"
-                                                : "—"}
+                                            {no_results ? "—" : `${record.votepct_choice3.toFixed(mobile ? 1 : 0)}%`}
                                         </span>
                                         <span class="count">
-                                            {record.votecount_choice3
-                                                ? intcomma(
-                                                      record.votecount_choice3
-                                                  )
-                                                : ""}
+                                            {no_results ? "" : intcomma(record.votecount_choice3)}
                                         </span>
                                     </div>
                                 </td>
@@ -262,20 +242,12 @@
 
                             {#if final_rank}
                                 <td class="choice">
-                                    <div>
+                                    <div class:empty={!record.votecount_choiceFinal}>
                                         <span class="pct">
-                                            {record.votepct_choiceFinal
-                                                ? record.votepct_choiceFinal.toFixed(
-                                                      mobile ? 1 : 0
-                                                  ) + "%"
-                                                : "—"}
+                                            {no_results || !record.votecount_choiceFinal ? "—" : `${record.votepct_choiceFinal.toFixed(mobile ? 1 : 0)}%`}
                                         </span>
                                         <span class="count">
-                                            {record.votecount_choiceFinal
-                                                ? intcomma(
-                                                      record.votecount_choiceFinal
-                                                  )
-                                                : ""}
+                                            {no_results || !record.votecount_choiceFinal ? "" : intcomma(record.votecount_choiceFinal)}
                                         </span>
                                     </div>
                                 </td>
@@ -291,7 +263,6 @@
             class="expand"
             on:click={() => {
                 candidates_expanded = !candidates_expanded;
-                console.log(cand_records);
             }}
         >
             View {candidates_expanded ? "fewer" : "all"} candidates
