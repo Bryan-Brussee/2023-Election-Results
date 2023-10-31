@@ -12,10 +12,11 @@
   import Timer from "./Timer.svelte";
   import OmniSearch from "./OmniSearch.svelte";
 
-  // const data_url =
-  //   "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/latest.csv.gz";
+  const data_url =
+    "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/latest.csv.gz";
 
-  const data_url = "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/versions/results-20231027160545.csv.gz"
+  // test data for 100% data
+  // const data_url = "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/versions/results-20231027160545.csv.gz"
 
   let innerWidth;
   
