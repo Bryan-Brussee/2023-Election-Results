@@ -1,6 +1,11 @@
 //styles that aren't supported by props from Select component
 
 .svelte-select {
+
+    input {
+        cursor: pointer;
+    }
+
     .svelte-select-list,
     .selected-item {
         font-family:'Benton Sans',Helvetica,sans-serif;
