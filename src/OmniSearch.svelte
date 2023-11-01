@@ -102,12 +102,7 @@
                 : `${fullId[0]}-${fullId[1]}`
             const sample_row = $sos_data.filter(row => row["seatname"] == o)[0]
             const results_group = sample_row.results_group
-            const append  = results_group === "SDRaceQuestions" ?
-                                " School District" :
-                                results_group === "cntyRaceQuestions" ?
-                                " County" :
-                                ""
-            const location = `${sample_row.location}${append}`
+            const location = `${sample_row.location}`
             const display_name = sample_row.display_name
             return {
                 "location": location, 
