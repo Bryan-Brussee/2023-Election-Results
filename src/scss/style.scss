@@ -4,8 +4,18 @@ $tablet: 768px;
 $desktop-sm: 992px;
 $desktop-lg: 1200px;
 
-@import 'global';
-@import 'table';
-@import 'timer';
-@import 'omnisearch';
+#elex-dashboard {
+    max-width: 992px;
+	margin-left: auto;
+	margin-right: auto;
+    position: relative;
+
+    @import 'global';
+    @import 'table';
+    @import 'timer';
+    @import 'omnisearch';
+
+}
+
+
 

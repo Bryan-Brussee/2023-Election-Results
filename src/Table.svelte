@@ -125,14 +125,15 @@
             <p>{@html wards_expanded ?
                 ward_description + "&nbsp;"  :
                 ward_description.split(" ").slice(0, mobile ? 10 : 15).join(" ") + " ...&nbsp;"}
+            
                 <button
-                on:click={() => {
+                on:click|preventDefault={() => {
                     wards_expanded = !wards_expanded;
                 }}
                 >{wards_expanded
                     ? "Hide full text"
                     : "Show full text"}</button
-            ></p>
+            >    </p>
         </div>
         {/if}
             </div>
@@ -157,9 +158,10 @@
                               .split(" ")
                               .slice(0, mobile ? 12 : 16)
                               .join(" ") + " ...&nbsp;"}
+                               
                     {#if question_copy.split(" ").length > (mobile ? 12 : 16)}
                     <button
-                        on:click={() => {
+                        on:click|preventDefault={() => {
                             question_expanded = !question_expanded;
                         }}
                         >{question_expanded
@@ -263,7 +265,7 @@
     {#if cand_records.length > 5}
         <button
             class="expand"
-            on:click={() => {
+            on:click|preventDefault={() => {
                 candidates_expanded = !candidates_expanded;
             }}
         >

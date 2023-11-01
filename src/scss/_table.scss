@@ -12,7 +12,7 @@
             height: auto;
 
             .mini-map {
-                align-self: center;
+                align-self: start;
             }
         }
 
@@ -52,7 +52,7 @@
             p {
                 font-family: Benton Sans, Helvetica, Arial, sans-serif;
                 margin-bottom: 0;
-                font-size: 14px;
+                font-size: 14px !important;
             }
 
             button {
@@ -65,6 +65,7 @@
                 border-bottom: 1px solid black;
                 color: black;
                 display: inline-block;
+                font-family: Benton Sans, Helvetica, Arial, sans-serif;
             }
         }
 
@@ -80,6 +81,7 @@
         border-collapse: collapse;
         border-spacing: 0;
         font-variant-numeric: tabular-nums;
+        margin-bottom: 0;
 
 
         thead {
@@ -169,6 +171,7 @@
         top: -2px;
         background-color: #efefef;
         color: black;
+        font-family: Benton Sans,Helvetica,Arial,sans-serif;
     }
 
     //let's move this into global styles for timer
@@ -200,12 +203,6 @@
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
-            }
-
-            &.expanded {
-                .mini-map {
-                    align-self: center;
-                }
             }
         }
 

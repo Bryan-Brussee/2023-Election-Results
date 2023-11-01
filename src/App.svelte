@@ -19,8 +19,12 @@
   // const data_url = "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/versions/results-20231027160545.csv.gz"
 
   let innerWidth;
+  // @ts-ignore
+  let timer = window.timer;
   
   $: mobile = innerWidth < 992 ? true : false;
+
+
 
   const loadData = async () => {
     const data = await csv(data_url);
@@ -118,9 +122,11 @@
 {#await loadData()}
   <p>Loading</p>
 {:then}
-  <div id="search"></div>
+<div id="search"></div>
 
+  {#if timer}
   <Timer {loadData} />
+  {/if}
 
   <OmniSearch />
 
@@ -129,6 +135,7 @@
       <section class="municipality" id={group[0]}>
         <h2 class="municipal-name">{group[0]}</h2>
         <div class="table-container">
+          <!-- can probably simplify this key now that we're splitting result id in app component -->
           {#each [...group[1]] as race_data (race_data[1][0]["result_id"].split("-")[0] + race_data[1][0]["result_id"].split("-")[1])}
             {@const rcv = race_data[0].charAt(0) == "2" ? true : false}
             <Table

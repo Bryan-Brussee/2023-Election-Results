@@ -1,40 +1,39 @@
-#elex-dashboard {
-    position: relative;
+.timer {
+    top: 0;
+    background-color: white;
+    padding: 10px 0;
+    z-index: 2;
+    text-align: center;
+    padding: 10px 0px;
+    border-bottom: 1px solid #e0e0e0;
+    text-transform: uppercase;
+    font-family: 'Benton Sans', Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    letter-spacing: .5px;
 
-    .timer {
-        top: 0;
-        background-color: white;
-        padding: 10px 0;
-        z-index: 2;
-        text-align: center;
-        padding: 10px 0px;
-        border-bottom: 1px solid #e0e0e0;
-        text-transform: uppercase;
-        font-family: 'Benton Sans',Helvetica,sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 13px;
-        letter-spacing: .5px;
+    width: 100%;
 
-        width: 100%;
+    p {
+        margin-bottom: 0;
+    }
 
-        p {
-            margin-bottom: 0;
-        }
+    .live2 {
+        font-weight: 700;
+        color: #c0392b;
+        margin-bottom: 5px !important;
+    }
 
-        .live2 {
-            font-weight: 700;
-            color: #c0392b;
-            margin-bottom: 5px !important;
-        }
-
-        .blink {
-            padding-right: 5px;
-            animation: blinker 2s linear infinite;
-          }
+    .blink {
+        padding-right: 5px;
+        animation: blinker 2s linear infinite;
     }
 }
 
-@keyframes blinker {  
-    50% { opacity: 0; }
-  }
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
