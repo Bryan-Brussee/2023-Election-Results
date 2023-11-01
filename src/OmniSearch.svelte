@@ -100,17 +100,19 @@
             const officeId = fullId[1].charAt(0) === "2" 
                 ? `${fullId[0]}-${fullId[1].slice(0,3)}`
                 : `${fullId[0]}-${fullId[1]}`
-            const results_group = $sos_data.filter(row => row["seatname"] == o)[0].results_group
+            const sample_row = $sos_data.filter(row => row["seatname"] == o)[0]
+            const results_group = sample_row.results_group
             const append  = results_group === "SDRaceQuestions" ?
                                 " School District" :
                                 results_group === "cntyRaceQuestions" ?
                                 " County" :
                                 ""
-            const location = `${$sos_data.filter(row => row["seatname"] == o)[0].location}${append}`
+            const location = `${sample_row.location}${append}`
+            const display_name = sample_row.display_name
             return {
                 "location": location, 
                 "value": o, 
-                "label": o.replace(/\([\w\s\d#]+\)/, "").replace("First Choice", "").replace(/\(Elect \d+\)/,""), 
+                "label": display_name, 
                 "id": officeId
             }
         });
