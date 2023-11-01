@@ -118,6 +118,8 @@
 {#await loadData()}
   <p>Loading</p>
 {:then}
+  <div id="search"></div>
+
   <Timer {loadData} />
 
   <OmniSearch />

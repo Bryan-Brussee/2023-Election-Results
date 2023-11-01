@@ -189,6 +189,8 @@
                 $filter_ids = $sos_data.filter(row => race_id(row.result_id) === selected.id).map(row => row["result_id"]);
             }
         }
+        const top = document.getElementById("search")
+        top.scrollIntoView()
     }
 
     // If an address has been selected, figure out what races apply to it and update $filter_ids accordingly
