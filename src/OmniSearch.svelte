@@ -190,6 +190,9 @@
         }
         const top = document.getElementById("search")
         top.scrollIntoView()
+        const input = document.querySelector(".value-container input")
+        // @ts-ignore
+        input.blur()
     }
 
     // If an address has been selected, figure out what races apply to it and update $filter_ids accordingly
