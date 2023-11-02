@@ -53,6 +53,12 @@
         width: 100%;
         z-index: -1;
         box-shadow: transparent 0px 0px, transparent 0px 0px, rgba(0, 0, 0, 0.15) 0px 6px 6px -6px;
+        opacity: 0;
+        transition: opacity 0.1s ease-in-out;
+    }
+
+    &.isStuck:after {
+        opacity: 1;
     }
 }
 
