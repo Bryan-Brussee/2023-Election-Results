@@ -275,11 +275,9 @@
         activeAddress=undefined;
     }
 
-    // Ensure locationsAndRaces updates after $sos_data first resolves
-    $: locationsAndRaces = getLocationsAndRaces($sos_data);
-
     onMount(()=>{
         geocoder.addTo("#geocoder");
+        locationsAndRaces = getLocationsAndRaces($sos_data);
         currentItems = locationsAndRaces;
     });
 
