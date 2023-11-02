@@ -22,7 +22,7 @@
   // @ts-ignore
   let timer = window.timer;
 
-  let top = 42;
+  let top = (!import.meta.env.DEV) ? 47 : 0;
 
   $: mobile = innerWidth < 992 ? true : false;
 
@@ -116,18 +116,12 @@
       }
 
       if (document.querySelector(".share-bar") !== null) {
-        // let share_bar = document.querySelector(".share-bar").getBoundingClientRect();
         share_bar_height = 47;
       }
 
       if (hat_container_height != 0 && share_bar_height != 0) {
         top = hat_container_height + share_bar_height;
       }
-
-      if (import.meta.env.DEV) {
-        top = 0;
-      }
-
     
   });
 </script>
@@ -167,3 +161,9 @@
 {:catch error}
   <p>{error.message}</p>
 {/await}
+<footer class="app-footer">
+    <p>Data from Minnesota Secretary of State.</p>
+
+    <p>Design and development by Tom Nehil and Bryan Brussee</p>
+</footer>
+

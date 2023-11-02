@@ -276,6 +276,7 @@
         </button>
     {/if}
     <footer class="interface precincts-reporting">
-        {precincts_reporting_pct}% of precincts reporting
+        {#if st_paul_race}St. Paul only reports live results for first-choice and final rank votes.<br>{/if}
+        {precincts_reporting_pct}% of precincts reporting. 
     </footer>
 </article>
