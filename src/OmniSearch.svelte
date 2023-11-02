@@ -211,7 +211,6 @@
 
     // If an address has been selected, figure out what races apply to it and update $filter_ids accordingly
     $: if (activeAddress) {
-        console.log(activeAddress)
         // County races
         const countyCode = activeAddress["County"]
         const countyDistrict = activeAddress["CommDist"]
