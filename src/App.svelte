@@ -85,14 +85,14 @@
   $: {
     //sort selected municipalities to the top
     grouped_data.sort((a, b) => {
-      if (a[0] == "Minneapolis") return -1;
-      if (b[0] == "Minneapolis") return 1;
+      if (a[0] == "43000") return -1;
+      if (b[0] == "43000") return 1;
 
-      if (a[0] == "St. Paul") return -1;
-      if (b[0] == "St. Paul") return 1;
+      if (a[0] == "58000") return -1;
+      if (b[0] == "58000") return 1;
 
-      if (a[0] == "Duluth") return -1;
-      if (b[0] == "Duluth") return 1;
+      if (a[0] == "17000") return -1;
+      if (b[0] == "17000") return 1;
     });
   }
 
