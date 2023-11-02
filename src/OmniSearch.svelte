@@ -64,16 +64,16 @@
             "DR": "DRIVE",
             "CR": "CIRCLE",
             "LN": "LANE",
-            "AVE": "AVENUE"
+            "AVE": "AVENUE",
+            "PKWY": "PARKWAY"
         }
 
-        const tokens = address.split(" ")
-        tokens.forEach(t => {
-            if (t in replacements) {
-                t = replacements[t]
-            };
-        });
-
+        let tokens = address.split(" ");
+        for (let i=0; i<tokens.length; i++) {
+            if (tokens[i] in replacements) {
+                tokens[i] = replacements[tokens[i]]
+            }
+        }
         return tokens.join(" ");
     }
 
@@ -169,9 +169,9 @@
                             r => parseInt(r.HouseNbrLo) <= selected.houseNumber && 
                             selected.houseNumber <= parseInt(r.HouseNbrHi)
                         );
-                    possibleRows.forEach(r => {
-                        r["StreetAddr"] = addressReplace(r["StreetAddr"]);
-                    });
+                    for (let i=0; i<possibleRows.length; i++) {
+                        possibleRows[i]["StreetAddr"] = addressReplace(possibleRows[i]["StreetAddr"])
+                    };
                     if (possibleRows.length > 0) {
                         streetSearch.addAll(possibleRows)
                         const result = streetSearch.search(selected.streetName)
