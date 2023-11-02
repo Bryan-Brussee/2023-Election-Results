@@ -172,12 +172,18 @@
                     possibleRows.forEach(r => {
                         r["StreetAddr"] = addressReplace(r["StreetAddr"]);
                     });
-                    streetSearch.addAll(possibleRows)
-                    const result = streetSearch.search(selected.streetName)
-                    if (result) {
-                        activeAddress = possibleRows.filter(r => r.id == result[0].id)[0]
+                    if (possibleRows.length > 0) {
+                        streetSearch.addAll(possibleRows)
+                        const result = streetSearch.search(selected.streetName)
+                        if (result.length > 0) {
+                            activeAddress = possibleRows.filter(r => r.id == result[0].id)[0]
+                        } else {
+                            $filter_ids = ["xxxx"]
+                        }
+                        streetSearch.removeAll();
+                    } else {
+                        $filter_ids = ["xxxx"]
                     }
-                    streetSearch.removeAll();
                 });
             } else {
                 $filter_ids = []
@@ -205,6 +211,7 @@
 
     // If an address has been selected, figure out what races apply to it and update $filter_ids accordingly
     $: if (activeAddress) {
+        console.log(activeAddress)
         // County races
         const countyCode = activeAddress["County"]
         const countyDistrict = activeAddress["CommDist"]
@@ -216,7 +223,7 @@
         ));
 
         // Municipal races
-        const mcdCode = mcdLookup[activeAddress["County"] + activeAddress["StateMCDCd"]]
+        const mcdCode = mcdLookup[`${parseInt(activeAddress["County"])}${activeAddress["StateMCDCd"]}`]
         const ward = activeAddress["Ward"]
 
         const muniRaces = $sos_data.filter(row => (
