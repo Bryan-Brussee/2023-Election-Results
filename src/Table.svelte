@@ -1,5 +1,4 @@
 <script>
-    import { removeParentheticals, removeRCVOrdinal } from "./helpers";
     import { intcomma } from "journalize";
     import { apStyleTitleCase as apCase } from "ap-style-title-case";
 
@@ -60,9 +59,7 @@
 
 
     $: seat_name = cand_records[0].seatname;
-    $: seat_name_formatted = apCase(
-        removeParentheticals(removeRCVOrdinal(seat_name).toLowerCase())
-    );
+    $: seat_name_formatted = cand_records[0].display_name;
 
     $: seats_open = seat_name.match(/Elect (\d+)/)
         ? seat_name.match(/Elect (\d+)/)[1]
@@ -123,8 +120,8 @@
                         {#if ward_description}
         <div class="wards-container">
             <p>{@html wards_expanded ?
-                ward_description + "&nbsp;"  :
-                ward_description.split(" ").slice(0, mobile ? 10 : 15).join(" ") + " ...&nbsp;"}
+                ward_description + "&nbsp;&nbsp;"  :
+                ward_description.split(" ").slice(0, mobile ? 7 : 15).join(" ") + " ...&nbsp;&nbsp;"}
             
                 <button
                 on:click|preventDefault={() => {
@@ -153,11 +150,11 @@
             <div class="question-container">
                 <p>
                     {@html question_expanded || question_copy.split(" ").length <= (mobile ? 12 : 16)
-                        ? question_copy + "&nbsp;"
+                        ? question_copy + "&nbsp;&nbsp;"
                         : question_copy
                               .split(" ")
                               .slice(0, mobile ? 12 : 16)
-                              .join(" ") + " ...&nbsp;"}
+                              .join(" ") + " ...&nbsp;&nbsp;"}
                                
                     {#if question_copy.split(" ").length > (mobile ? 12 : 16)}
                     <button

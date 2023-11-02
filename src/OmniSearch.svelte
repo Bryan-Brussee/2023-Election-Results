@@ -12,6 +12,8 @@
     // Stores
     import { sos_data, filter_ids } from "./stores";
 
+    export let top;
+
     let activeAddress;
     let filterText;
     let doingAddressSearch = false;
@@ -268,7 +270,7 @@
 
 
 
-<div class="sticky-wrapper">
+<div class="sticky-wrapper" style="top: {top}px;">
 
     <Select
     items={currentItems}

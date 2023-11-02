@@ -1,18 +1,5 @@
 import { groups } from 'd3-array';
 
-//removes any case occurence of 'choice' as well as the word that precedes it
-//intended to remove substrings such as 'first choice', 'second choice' etc. from seatname strings
-export function removeRCVOrdinal(input) {
-  const pattern = /\s*\b\w+\b\s*\bChoice\b/gi;
-  const output = input.replace(pattern, '');
-  return output.trim();
-}
-
-//return a string without parentheticals removed
-export function removeParentheticals(inputStr) {
-  return inputStr.replace(/\(.*?\)/g, '').trim();
-}
-
 
 //more descriptive name
 export function groupRCVRecords(race_records) {

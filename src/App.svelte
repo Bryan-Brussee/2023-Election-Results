@@ -5,7 +5,7 @@
 
   import { groupRCVRecords } from "./helpers";
 
-  import location_lookup from "./data/location_lookup.json";
+  import { onMount } from "svelte";
 
   // Components
   import Table from "./Table.svelte";
@@ -21,10 +21,10 @@
   let innerWidth;
   // @ts-ignore
   let timer = window.timer;
-  
+
+  let top = 42;
+
   $: mobile = innerWidth < 992 ? true : false;
-
-
 
   const loadData = async () => {
     const data = await csv(data_url);
@@ -36,12 +36,16 @@
     $sos_data.forEach((record) => {
       if (record.full_name == "") {
         let split_id = record.result_id.split("-");
-        split_id[0].length == 2 ? record.county_id = split_id[0] : record.district = split_id[0]
+        split_id[0].length == 2
+          ? (record.county_id = split_id[0])
+          : (record.district = split_id[0]);
         record.office_id = split_id[1];
         record.cand_order = split_id[2];
       }
 
-      (record.location) == "St Louis Park" ? record.location = "St. Louis Park" : record.location = record.location;
+      record.location == "St Louis Park"
+        ? (record.location = "St. Louis Park")
+        : (record.location = record.location);
 
       //format numbers as ints or floats
       record.votecount = parseInt(record.votecount);
@@ -75,25 +79,10 @@
     (d) => d.result_id.split("-")[0],
     //and then group by race equivalent substring of ID. For RCV, whichs always appears to start with '2', drops last character
     (d) =>
-        d.office_id.charAt(0) == "2"
-          ? d.office_id.slice(0, -1)
-          : d.office_id
+      d.office_id.charAt(0) == "2" ? d.office_id.slice(0, -1) : d.office_id
   );
 
-  //reference our location id against lookup table
   $: {
-    grouped_data.forEach((group) => {
-      const location_id = group[0];
-
-      if (location_id.length == 2) {
-        group[0] = location_lookup[location_id] + " County";
-      } else if (location_id.length == 4) {
-        group[0] = location_lookup[location_id] + " School District";
-      } else {
-        group[0] = location_lookup[location_id];
-      }
-    });
-
     //sort selected municipalities to the top
     grouped_data.sort((a, b) => {
       if (a[0] == "Minneapolis") return -1;
@@ -108,13 +97,39 @@
   }
 
   $: {
-    $sos_data.forEach(record => {
+    grouped_data.forEach((record) => {
       // if (record.location === "Rochester") {
-        console.log(record)
+      console.log(record);
       // }
-    })
+    });
   }
 
+  onMount(() => {
+      let hat_container_height = 0;
+      let share_bar_height = 0;
+
+      if (document.querySelector(".hat-container") !== null) {
+        let hat_container = document
+          .querySelector(".hat-container")
+          .getBoundingClientRect();
+        hat_container_height = hat_container.height;
+      }
+
+      if (document.querySelector(".share-bar") !== null) {
+        // let share_bar = document.querySelector(".share-bar").getBoundingClientRect();
+        share_bar_height = 47;
+      }
+
+      if (hat_container_height != 0 && share_bar_height != 0) {
+        top = hat_container_height + share_bar_height;
+      }
+
+      if (import.meta.env.DEV) {
+        top = 0;
+      }
+
+    
+  });
 </script>
 
 <svelte:window bind:innerWidth />
@@ -122,20 +137,19 @@
 {#await loadData()}
   <p>Loading</p>
 {:then}
-<div id="search"></div>
+  <div id="search" />
 
   {#if timer}
-  <Timer {loadData} />
+    <Timer {loadData} />
   {/if}
 
-  <OmniSearch />
+  <OmniSearch {top} />
 
   <div class="section-container">
     {#each [...grouped_data] as group}
-      <section class="municipality" id={group[0]}>
-        <h2 class="municipal-name">{group[0]}</h2>
+      <section class="municipality">
+        <h2 class="municipal-name">{group[1][0][1][0].location}</h2>
         <div class="table-container">
-          <!-- can probably simplify this key now that we're splitting result id in app component -->
           {#each [...group[1]] as race_data (race_data[1][0]["result_id"].split("-")[0] + race_data[1][0]["result_id"].split("-")[1])}
             {@const rcv = race_data[0].charAt(0) == "2" ? true : false}
             <Table
