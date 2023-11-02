@@ -12,10 +12,7 @@
   import Timer from "./Timer.svelte";
   import OmniSearch from "./OmniSearch.svelte";
 
-  const data_url = "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/latest.csv.gz";
-
-  // test data for 100% data
-  // const data_url = "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/versions/results-20231027160545.csv.gz"
+  const data_url = "https://electiondata.startribune.com/projects/2023-election-results/nov/latest.csv.gz";
 
   let innerWidth;
   // @ts-ignore
@@ -95,14 +92,6 @@
     });
   }
 
-  $: {
-    grouped_data.forEach((record) => {
-      // if (record.location === "Rochester") {
-      console.log(record);
-      // }
-    });
-  }
-
   onMount(() => {
       let hat_container_height = 0;
       let share_bar_height = 0;
@@ -130,7 +119,7 @@
 {#await loadData()}
   <p>Loading</p>
 {:then}
-  <div id="search" />
+  <div id="search" style="scroll-margin: 60px;" />
 
   {#if timer}
     <Timer {loadData} />

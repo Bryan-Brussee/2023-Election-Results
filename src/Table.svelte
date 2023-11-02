@@ -73,7 +73,7 @@
 
     $: question_table = /113|503/.test(office_id.substr(0, 3)) || office_id == "0421";
     $: st_paul_race = cand_records[0].district === "58000";
-    $: question_copy = questions[`${district_id}-${office_id}`]?.question_body;
+    $: question_copy = questions[`${district_id > 2 ? district_id : county_id}-${office_id}`]?.question_body;
 
     $: ward_description = ward_descriptions[district_id]?.[office_id];
 
@@ -121,7 +121,7 @@
         <div class="wards-container">
             <p>{@html wards_expanded ?
                 ward_description + "&nbsp;&nbsp;"  :
-                ward_description.split(" ").slice(0, mobile ? 7 : 15).join(" ") + " ...&nbsp;&nbsp;"}
+                ward_description.split("").slice(0, mobile ? 55 : 90).join("") + "...&nbsp;&nbsp;"}
             
                 <button
                 on:click|preventDefault={() => {
@@ -149,12 +149,12 @@
         {#if question_copy}
             <div class="question-container">
                 <p>
-                    {@html question_expanded || question_copy.split(" ").length <= (mobile ? 12 : 16)
+                    {@html question_expanded || question_copy.split("").length <= (mobile ? 55 : 90)
                         ? question_copy + "&nbsp;&nbsp;"
                         : question_copy
-                              .split(" ")
-                              .slice(0, mobile ? 12 : 16)
-                              .join(" ") + " ...&nbsp;&nbsp;"}
+                              .split("")
+                              .slice(0, mobile ? 55 : 90)
+                              .join("") + "...&nbsp;&nbsp;"}
                                
                     {#if question_copy.split(" ").length > (mobile ? 12 : 16)}
                     <button
