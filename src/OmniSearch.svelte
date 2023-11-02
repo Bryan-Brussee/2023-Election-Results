@@ -209,11 +209,11 @@
         const countyCode = activeAddress["County"]
         const countyDistrict = activeAddress["CommDist"]
 
-        const countyRaces = $sos_data.filter(row => {
+        const countyRaces = $sos_data.filter(row => (
             row["results_group"] == "cntyRaceQuestions" && 
             row["county_id"] == countyCode &&
             ["", countyDistrict].includes(row["district"])
-        });
+        ));
 
         // Municipal races
         const mcdCode = mcdLookup[activeAddress["County"] + activeAddress["StateMCDCd"]]
