@@ -12,8 +12,7 @@
   import Timer from "./Timer.svelte";
   import OmniSearch from "./OmniSearch.svelte";
 
-  const data_url =
-    "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/latest.csv.gz";
+  const data_url = "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/latest.csv.gz";
 
   // test data for 100% data
   // const data_url = "https://electiondata.startribune.com/projects/2023-election-results/staging/nov/versions/results-20231027160545.csv.gz"
@@ -22,7 +21,7 @@
   // @ts-ignore
   let timer = window.timer;
 
-  let top = (!import.meta.env.DEV) ? 47 : 0;
+  let top = /m.startribune.com|www.startribune.com/.test(window.location.host) ? 42 : 0;
 
   $: mobile = innerWidth < 992 ? true : false;
 
@@ -119,7 +118,7 @@
         share_bar_height = 47;
       }
 
-      if (hat_container_height != 0 && share_bar_height != 0) {
+      if (hat_container_height != 0 || share_bar_height != 0) {
         top = hat_container_height + share_bar_height;
       }
     
@@ -158,10 +157,7 @@
       </section>
     {/each}
   </div>
-{:catch error}
-  <p>{error.message}</p>
-{/await}
-<footer class="app-footer">
+  <footer class="app-footer">
     <p>
       Results data comes from the Minnesota Secretary of State. Data on ranked-choice voting
       reallocations and winners comes from the respective municipalities. In non-ranked-choice
@@ -174,4 +170,8 @@
 
     <p>Design and development by Tom Nehil and Bryan Brussee</p>
 </footer>
+{:catch error}
+  <p>{error.message}</p>
+{/await}
+
 

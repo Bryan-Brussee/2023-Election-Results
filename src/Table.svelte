@@ -276,7 +276,7 @@
         </button>
     {/if}
     <footer class="interface precincts-reporting">
-        {#if st_paul_race}St. Paul only reports live results for first-choice votes.<br>{/if}
+        {#if st_paul_race && rcv}St. Paul only reports live results for first-choice votes.<br>{/if}
         {precincts_reporting_pct}% of precincts reporting. 
     </footer>
 </article>

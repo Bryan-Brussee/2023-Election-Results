@@ -8,11 +8,19 @@
 
     // Helpers
     import mcdLookup from "./mcdfipslookup.json";
+    import sticky from "./sticky"
 
     // Stores
     import { sos_data, filter_ids } from "./stores";
 
+    //sticky variables
     export let top;
+    let stickToTop = true;
+    let isStuck = false;
+
+    function handleStuck(e) {
+        isStuck = e.detail.isStuck;
+    }
 
     let activeAddress;
     let filterText;
@@ -266,11 +274,21 @@
         currentItems = locationsAndRaces;
     });
 
+    //a little extra jazz
+
 </script>
 
 
-
-<div class="sticky-wrapper" style="top: {top}px;">
+{#if !stickToTop}
+<slot />
+{/if}
+<div 
+class="sticky-wrapper" 
+style="top: {top}px;"
+class:isStuck
+data-position={stickToTop ? 'top' : 'bottom'}
+use:sticky={{ stickToTop }}
+on:stuck={handleStuck}>
 
     <Select
     items={currentItems}
@@ -295,6 +313,9 @@
         </div>
     </Select>
 </div>
+{#if stickToTop}
+<slot />
+{/if}
 
 <div id="omnisearch-status">
     {#if selected && $filter_ids.length > 0 && $filter_ids[0] !== "xxxx"}
