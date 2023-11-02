@@ -162,7 +162,15 @@
   <p>{error.message}</p>
 {/await}
 <footer class="app-footer">
-    <p>Data from Minnesota Secretary of State.</p>
+    <p>
+      Results data comes from the Minnesota Secretary of State. Data on ranked-choice voting
+      reallocations and winners comes from the respective municipalities. In non-ranked-choice
+      elections, the Star Tribune marks unofficial winners if all precincts in the election have
+      reported and the winners lead by a margin greater than the 
+      <a href="https://www.revisor.mn.gov/statutes/cite/204C.36">legal threshold for a state-funded
+      recount</a>, and there are no potential successful write-in winners. All election results are 
+      unofficial until certified by the appropriate canvassing boards.
+    </p>
 
     <p>Design and development by Tom Nehil and Bryan Brussee</p>
 </footer>
