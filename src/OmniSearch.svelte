@@ -96,29 +96,23 @@
     });
 
     const getLocationsAndRaces = (data) => {
-        const offices = Array.from(new Set($sos_data.map(row => row["seatname"])));
+        const officeId = (id) => {
+            const result_id = id.split("-")
+            const location_id = result_id[0]
+            const office_id = result_id[1].charAt(0) === "2" ? result_id[1].slice(0,3) : result_id[1]
+            return `${location_id}-${office_id}`
+        }
+        const offices = Array.from(new Set($sos_data.map(row => officeId(row["result_id"]))));
         const items = offices
-        .filter(o => {
-            const seatId = $sos_data.filter(row => row["seatname"] === o)[0].office_id;
-            if ((seatId.charAt(0) === "2" && seatId.charAt(3) === "1") || seatId.charAt(0) !== "2") {
-                return true
-            }
-            return false
-        })
         .map(o => {
-            const fullId = $sos_data.filter(row => row["seatname"] == o)[0].result_id.split("-");
-            const officeId = fullId[1].charAt(0) === "2" 
-                ? `${fullId[0]}-${fullId[1].slice(0,3)}`
-                : `${fullId[0]}-${fullId[1]}`
-            const sample_row = $sos_data.filter(row => row["seatname"] == o)[0]
-            const results_group = sample_row.results_group
-            const location = `${sample_row.location}`
+            const sample_row = $sos_data.filter(row => officeId(row["result_id"]) == o)[0]
+            const location = sample_row.location
             const display_name = sample_row.display_name
             return {
                 "location": location, 
                 "value": o, 
                 "label": display_name, 
-                "id": officeId
+                "id": officeId(sample_row["result_id"])
             }
         });
         officesSearch.removeAll();
@@ -191,7 +185,7 @@
         } else {
             activeAddress = undefined;
             if (selected.groupHeader) {
-                $filter_ids = $sos_data.filter(row => row["location"] === selected.value.replace(' School District','')).map(row => row["result_id"])
+                $filter_ids = $sos_data.filter(row => row["location"] === selected.value).map(row => row["result_id"])
             } else {
                 const race_id = (result_id) => {
                     const parts = result_id.split("-")
