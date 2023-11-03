@@ -65,7 +65,9 @@
             "CR": "CIRCLE",
             "LN": "LANE",
             "AVE": "AVENUE",
-            "PKWY": "PARKWAY"
+            "PKWY": "PARKWAY",
+            "TER": "TERRACE",
+            "PL": "PLACE"
         }
 
         let tokens = address.split(" ");
@@ -168,7 +170,7 @@
                     };
                     if (possibleRows.length > 0) {
                         streetSearch.addAll(possibleRows)
-                        const result = streetSearch.search(selected.streetName)
+                        const result = streetSearch.search(addressReplace(selected.streetName))
                         if (result.length > 0) {
                             activeAddress = possibleRows.filter(r => r.id == result[0].id)[0]
                         } else {
