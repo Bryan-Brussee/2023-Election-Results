@@ -91,7 +91,7 @@
 
     // Setup for Offices/Locations select
     const officesSearch = new MiniSearch({
-        fields: ["location", "value"],
+        fields: ["location", "label"],
         storeFields: ["location", "value", "label", "id"]
     });
 
