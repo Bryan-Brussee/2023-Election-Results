@@ -105,7 +105,7 @@
             return `${location_id}-${office_id}`
         }
         const offices = Array.from(new Set($sos_data.map(row => officeId(row["result_id"]))));
-        const items = offices
+        let items = offices
         .map(o => {
             const sample_row = $sos_data.filter(row => officeId(row["result_id"]) == o)[0]
             const location = sample_row.location
@@ -117,6 +117,26 @@
                 "id": officeId(sample_row["result_id"])
             }
         });
+        items.push(...[
+            {
+                "location": "Laporte Public School District",
+                "value": "0306-5001",
+                "label": "Special Election For School Board Member ",
+                "id": "0306-5001"
+            },
+            {
+                "location": "Rothsay Public School District",
+                "value": "0850-5000",
+                "label": "School Board Member At Large  ",
+                "id": "0850-5000"
+            },
+            {
+                "location": "Laporte Public School District",
+                "value": "0306-5031",
+                "label": "School District Question 1 ",
+                "id": "0306-5031"
+            }
+        ]);
         officesSearch.removeAll();
         officesSearch.addAll(items);
         return items;
@@ -182,12 +202,19 @@
                     }
                 });
             } else {
-                $filter_ids = []
+                $filter_ids = ["nonmn"]
             }
         } else {
             activeAddress = undefined;
             if (selected.groupHeader) {
                 $filter_ids = $sos_data.filter(row => row["location"] === selected.value).map(row => row["result_id"])
+                // Special handling for deleted school districts
+                if (selected.value === "Rothsay Public School District") {
+                    $filter_ids = ["rothsay"]
+                }
+                if (selected.value === "Laporte Public School District") {
+                    $filter_ids = ["laporte"]
+                }
             } else {
                 const race_id = (result_id) => {
                     const parts = result_id.split("-")
@@ -196,6 +223,13 @@
                         : `${parts[0]}-${parts[1]}`
                 }
                 $filter_ids = $sos_data.filter(row => race_id(row.result_id) === selected.id).map(row => row["result_id"]);
+            }
+            // Special handling for deleted school districts
+            if (selected.location === "Rothsay Public School District") {
+                $filter_ids = ["rothsay"]
+            }
+            if (selected.location === "Laporte Public School District") {
+                $filter_ids = ["laporte"]
             }
         }
         const top = document.getElementById("search")
@@ -230,12 +264,18 @@
         // School races
         const schoolData = activeAddress["SchDist"].split("-")
 
-        const schoolRaces = $sos_data.filter(row => (
+        let schoolRaces = $sos_data.filter(row => (
             row["results_group"] == "SDRaceQuestions" &&
             row["district"] == schoolData[0].padStart(4, "0") &&
             ["", schoolData[1].padStart(2, "0")].includes(getWard(row["seatname"]))
         ));
-
+        // Special hardcoded handling for school districts no longer reporting through SoS
+        if (schoolData[0] === "306") {
+            schoolRaces = [{"result_id": "laporte"}]
+        }
+        if (schoolData[0] === "850") {
+            schoolRaces = [{"result_id": "rothsay"}]
+        }
         $filter_ids = [...countyRaces, ...muniRaces, ...schoolRaces].map(r => r.result_id);
         if ($filter_ids.length === 0) {
             $filter_ids = ["xxxx"]
@@ -321,7 +361,8 @@ on:stuck={handleStuck}>
 {/if}
 
 <div id="omnisearch-status">
-    {#if selected && $filter_ids.length > 0 && $filter_ids[0] !== "xxxx"}
+
+    {#if selected && $filter_ids.length > 0 && !["xxxx","nonmn","rothsay","laporte"].includes($filter_ids[0])}
         Showing results for
         {#if selected.houseNumber || selected.groupHeader}
             <span>{selected.label}</span>
@@ -330,8 +371,22 @@ on:stuck={handleStuck}>
         {/if}
         <button on:click={clearAll}>Show all</button>
     {/if}
+    {#if selected && $filter_ids.includes("rothsay")}
+        <br><br>Note: Results for the school board election for <strong>Rothsay Public School District</strong>
+        are not available because those results are not being reported to the Minnesota
+        Secretary of State.
+    {/if}
+    {#if selected && $filter_ids.includes("laporte")}
+        <br><br>Note: Results for the school board election and referendum for <strong>Laporte Public School District</strong>
+        are not available because those results are not being reported to the Minnesota
+        Secretary of State. 
+    {/if}
     {#if selected && $filter_ids[0] === "xxxx"}
         No elections found for the address {selected.label}. 
+        <button on:click={clearAll}>Clear search</button>
+    {/if}
+    {#if selected && $filter_ids[0] === "nonmn"}
+        Election results are only available for locations in Minnesota. 
         <button on:click={clearAll}>Clear search</button>
     {/if}
 </div>
