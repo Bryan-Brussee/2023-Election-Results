@@ -1,5 +1,5 @@
 <script>
-    import { intcomma } from "journalize";
+    import { intcomma, pluralize, apnumber, capfirst } from "journalize";
     import { apStyleTitleCase as apCase } from "ap-style-title-case";
 
     import questions from "./data/questions.json";
@@ -65,11 +65,12 @@
         ? seat_name.match(/Elect (\d+)/)[1]
         : 1;
 
+    $: winners = cand_records.filter((candidate) => candidate.winner == "True").length;
+
+    $: too_close = winners < seats_open;
+
     //decimal rounded to nearest integer
-    $: precincts_reporting_pct = Math.round(
-        (cand_records[0].precinctsreporting / cand_records[0].precinctstotal) *
-            100
-    );
+    $: precincts_reporting_pct = (cand_records[0].precinctsreporting / cand_records[0].precinctstotal) * 100;
 
     $: question_table = /113|503/.test(office_id.substr(0, 3)) || office_id == "0421";
     $: st_paul_race = cand_records[0].district === "58000";
@@ -119,9 +120,9 @@
 
                         {#if ward_description}
         <div class="wards-container">
-            <p>{@html wards_expanded ?
+            <span>{@html wards_expanded ?
                 ward_description + "&nbsp;&nbsp;"  :
-                ward_description.split("").slice(0, mobile ? 55 : 90).join("") + "...&nbsp;&nbsp;"}
+                ward_description.split("").slice(0, mobile ? 55 : 90).join("") + "...&nbsp;&nbsp;"}</span>
             
                 <button
                 on:click|preventDefault={() => {
@@ -130,7 +131,7 @@
                 >{wards_expanded
                     ? "Hide full text"
                     : "Show full text"}</button
-            >    </p>
+            >    
         </div>
         {/if}
             </div>
@@ -148,13 +149,14 @@
         </div>
         {#if question_copy}
             <div class="question-container">
-                <p>
+                <span>
                     {@html question_expanded || question_copy.split("").length <= (mobile ? 55 : 90)
                         ? question_copy + "&nbsp;&nbsp;"
                         : question_copy
                               .split("")
                               .slice(0, mobile ? 55 : 90)
                               .join("") + "...&nbsp;&nbsp;"}
+                                              </span>
                                
                     {#if question_copy.split(" ").length > (mobile ? 12 : 16)}
                     <button
@@ -166,7 +168,6 @@
                             : "Show full text"}</button
                     >
                     {/if}
-                </p>
             </div>
         {/if}
 
@@ -276,7 +277,13 @@
         </button>
     {/if}
     <footer class="interface precincts-reporting">
+        <!-- St. Paul note -->
         {#if st_paul_race && rcv}St. Paul only reports live results for first-choice votes.<br>{/if}
-        {precincts_reporting_pct}% of precincts reporting. 
+       <!-- Precincts reporting note -->
+        {precincts_reporting_pct.toFixed(0)}% of precincts reporting.
+        <!-- 'Too close' note -->
+        {#if too_close && precincts_reporting_pct.toFixed(0) === "100"}
+        {(question_table) ? "Referendum is too close to call." : `${capfirst(apnumber(seats_open - winners))} seat${pluralize(seats_open - winners)} ${seats_open - winners == 1 ? "is" : "are"} too close to call.`}
+        {/if} 
     </footer>
 </article>
