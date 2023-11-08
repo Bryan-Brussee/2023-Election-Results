@@ -123,7 +123,7 @@
 {#await loadData()}
   <p>Loading</p>
 {:then}
-  <div id="search" style="scroll-margin: 60px;" />
+  <div id="search" style="scroll-margin: 70px;" />
 
   {#if timer}
     <Timer {loadData} />
