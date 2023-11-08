@@ -107,8 +107,12 @@
         share_bar_height = 47;
       }
 
-      if (hat_container_height != 0 || share_bar_height != 0) {
-        top = hat_container_height + share_bar_height;
+      if (share_bar_height != 0 ) {
+        top = share_bar_height
+      } 
+
+      if (hat_container_height != 0) {
+        top = top + hat_container_height;
       }
     
   });

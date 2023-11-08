@@ -309,6 +309,17 @@
         filterText=""; 
         selected=undefined; 
         activeAddress=undefined;
+
+        //return to top of page
+        const top = document.getElementById("search");
+        top.scrollIntoView();
+
+        //un-focus input after clearing
+        setTimeout(() => {
+            const input = document.querySelector(".value-container input")
+            // @ts-ignore
+            input.blur()
+        }, 0)
     }
 
     onMount(()=>{
@@ -372,14 +383,18 @@ on:stuck={handleStuck}>
         <button on:click={clearAll}>Show all</button>
     {/if}
     {#if selected && $filter_ids.includes("rothsay")}
-        <br><br>Note: Results for the school board election for <strong>Rothsay Public School District</strong>
+        Note: Results for the school board election for <strong>Rothsay Public School District</strong>
         are not available because those results are not being reported to the Minnesota
         Secretary of State.
+        <button on:click={clearAll}>Clear search</button>
+
     {/if}
     {#if selected && $filter_ids.includes("laporte")}
-        <br><br>Note: Results for the school board election and referendum for <strong>Laporte Public School District</strong>
+        Note: Results for the school board election and referendum for <strong>Laporte Public School District</strong>
         are not available because those results are not being reported to the Minnesota
-        Secretary of State. 
+        Secretary of State.
+        <button on:click={clearAll}>Clear search</button>
+ 
     {/if}
     {#if selected && $filter_ids[0] === "xxxx"}
         No elections found for the address {selected.label}. 
