@@ -48,7 +48,7 @@
         if (record.votecount_choiceFinal) {
             final_rank = true;
         }
-        if (record.votecount > 0) {
+        if (record.votecount > 0 || record.precinctsreporting > 0) {
             no_results = false;
         }
     });
