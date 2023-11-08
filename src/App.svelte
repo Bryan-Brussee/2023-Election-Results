@@ -18,7 +18,8 @@
   // @ts-ignore
   let timer = window.timer;
 
-  let top = /m.startribune.com|www.startribune.com/.test(window.location.host) ? 42 : 0;
+  // let top = /m.startribune.com|www.startribune.com/.test(window.location.host) ? 42 : 0;
+  let top = 0;
 
   $: mobile = innerWidth < 992 ? true : false;
 
@@ -105,6 +106,10 @@
 
       if (document.querySelector(".share-bar") !== null) {
         share_bar_height = 47;
+      }
+
+      if (document.querySelector(".l-navigation-shortnav-container") !== null) {
+        share_bar_height = 42
       }
 
       if (share_bar_height != 0 ) {
