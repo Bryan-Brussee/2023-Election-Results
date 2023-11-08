@@ -313,13 +313,6 @@
         //return to top of page
         const top = document.getElementById("search");
         top.scrollIntoView();
-
-        //un-focus input after clearing
-        setTimeout(() => {
-            const input = document.querySelector(".value-container input")
-            // @ts-ignore
-            input.blur()
-        }, 0)
     }
 
     onMount(()=>{
