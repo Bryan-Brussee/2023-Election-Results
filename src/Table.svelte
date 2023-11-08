@@ -65,6 +65,7 @@
         ? seat_name.match(/Elect (\d+)/)[1]
         : 1;
 
+
     $: winners = cand_records.filter((candidate) => candidate.winner == "True").length;
 
     $: too_close = winners < seats_open;
@@ -284,6 +285,10 @@
         <!-- 'Too close' note -->
         {#if too_close && precincts_reporting_pct.toFixed(0) === "100" && !rcv}
         {(question_table) ? "Referendum is too close to call." : `${capfirst(apnumber(seats_open - winners))} seat${pluralize(seats_open - winners)} ${seats_open - winners == 1 ? "is" : "are"} too close to call.`}
-        {/if} 
+        {/if}
+        <!-- Special note for two primary races -->
+        {#if seat_name_formatted === "Special Primary For County Commissioner District 3" && winners < 2}
+        {`${capfirst(apnumber(2 - winners))} seat${pluralize(2 - winners)} ${2 - winners == 1 ? "is" : "are"} too close to call.`}
+        {/if}
     </footer>
 </article>
