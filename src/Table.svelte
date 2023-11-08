@@ -282,7 +282,7 @@
        <!-- Precincts reporting note -->
         {precincts_reporting_pct.toFixed(0)}% of precincts reporting.
         <!-- 'Too close' note -->
-        {#if too_close && precincts_reporting_pct.toFixed(0) === "100"}
+        {#if too_close && precincts_reporting_pct.toFixed(0) === "100" && !rcv}
         {(question_table) ? "Referendum is too close to call." : `${capfirst(apnumber(seats_open - winners))} seat${pluralize(seats_open - winners)} ${seats_open - winners == 1 ? "is" : "are"} too close to call.`}
         {/if} 
     </footer>
