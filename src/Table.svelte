@@ -287,7 +287,7 @@
         {(question_table) ? "Referendum is too close to call." : `${capfirst(apnumber(seats_open - winners))} seat${pluralize(seats_open - winners)} ${seats_open - winners == 1 ? "is" : "are"} too close to call.`}
         {/if}
         <!-- Special note for two primary races -->
-        {#if seat_name_formatted === "Special Primary For County Commissioner District 3" && winners < 2}
+        {#if seat_name_formatted === "Special Primary For County Commissioner District 3" && winners < 2 && precincts_reporting_pct.toFixed(0) === "100"}
         {`${capfirst(apnumber(2 - winners))} seat${pluralize(2 - winners)} ${2 - winners == 1 ? "is" : "are"} too close to call.`}
         {/if}
     </footer>
