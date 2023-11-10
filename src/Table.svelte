@@ -70,6 +70,8 @@
 
     $: too_close = winners < seats_open;
 
+    $: write_in_among_possible_winners = (cand_records.slice(0, seats_open).some(record => record.full_name.toLowerCase().includes("write-in")))
+
     //decimal rounded to nearest integer
     $: precincts_reporting_pct = (cand_records[0].precinctsreporting / cand_records[0].precinctstotal) * 100;
 
@@ -283,7 +285,7 @@
        <!-- Precincts reporting note -->
         {precincts_reporting_pct.toFixed(0)}% of precincts reporting.
         <!-- 'Too close' note -->
-        {#if too_close && precincts_reporting_pct.toFixed(0) === "100" && !rcv && cand_records[0].full_name.toLowerCase() !== "write-in"}
+        {#if too_close && precincts_reporting_pct.toFixed(0) === "100" && !rcv && !write_in_among_possible_winners}
         {(question_table) ? "Referendum is too close to call." : `${capfirst(apnumber(seats_open - winners))} seat${pluralize(seats_open - winners)} ${seats_open - winners == 1 ? "is" : "are"} too close to call.`}
         {/if}
         <!-- Special note for two primary races -->
