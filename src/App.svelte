@@ -12,7 +12,8 @@
   import Timer from "./Timer.svelte";
   import OmniSearch from "./OmniSearch.svelte";
 
-  const data_url = "https://electiondata.startribune.com/projects/2023-election-results/nov/latest.csv.gz";
+  const data_url =
+    "https://electiondata.startribune.com/projects/2023-election-results/nov/latest.csv.gz";
 
   let innerWidth;
   // @ts-ignore
@@ -94,32 +95,31 @@
   }
 
   onMount(() => {
-      let hat_container_height = 0;
-      let share_bar_height = 0;
+    let hat_container_height = 0;
+    let share_bar_height = 0;
 
-      if (document.querySelector(".hat-container") !== null) {
-        let hat_container = document
-          .querySelector(".hat-container")
-          .getBoundingClientRect();
-        hat_container_height = hat_container.height;
-      }
+    if (document.querySelector(".hat-container") !== null) {
+      let hat_container = document
+        .querySelector(".hat-container")
+        .getBoundingClientRect();
+      hat_container_height = hat_container.height;
+    }
 
-      if (document.querySelector(".share-bar") !== null) {
-        share_bar_height = 47;
-      }
+    if (document.querySelector(".share-bar") !== null) {
+      share_bar_height = 47;
+    }
 
-      if (document.querySelector(".l-navigation-shortnav-container") !== null) {
-        share_bar_height = 42
-      }
+    if (document.querySelector(".l-navigation-shortnav-container") !== null) {
+      share_bar_height = 42;
+    }
 
-      if (share_bar_height != 0 ) {
-        top = share_bar_height
-      } 
+    if (share_bar_height != 0) {
+      top = share_bar_height;
+    }
 
-      if (hat_container_height != 0) {
-        top = top + hat_container_height;
-      }
-    
+    if (hat_container_height != 0) {
+      top = top + hat_container_height;
+    }
   });
 </script>
 
@@ -157,19 +157,22 @@
   </div>
   <footer class="app-footer">
     <p>
-      Results data comes from the Minnesota Secretary of State. Data on ranked-choice voting
-      reallocations and winners comes from the respective municipalities. In non-ranked-choice
-      elections, the Star Tribune marks unofficial winners if all precincts in the election have
-      reported and the winners lead by a margin greater than the 
-      <a href="https://www.revisor.mn.gov/statutes/cite/204C.36">legal threshold for a state-funded
-      recount</a>, and there are no potential successful write-in winners. All election results are 
-      unofficial until certified by the appropriate canvassing boards.
+      Results data comes from the Minnesota Secretary of State. Data on
+      ranked-choice voting reallocations and winners comes from the respective
+      municipalities. In non-ranked-choice elections, the Star Tribune marks
+      unofficial winners if all precincts in the election have reported and the
+      winners lead by a margin greater than the
+      <a href="https://www.revisor.mn.gov/statutes/cite/204C.36"
+        >legal threshold for a state-funded recount</a
+      >, and there are no potential successful write-in winners. In cases where
+      a race is too close to mark a winner on election night, a winner will be
+      marked if the losing candidate has conceded or the winner is officially
+      identified. All election results are unofficial until certified by the
+      appropriate canvassing boards.
     </p>
 
     <p>Design and development by Tom Nehil and Bryan Brussee</p>
-</footer>
+  </footer>
 {:catch error}
   <p>{error.message}</p>
 {/await}
-
-

@@ -72,7 +72,6 @@
 
     $: write_in_among_possible_winners = (cand_records.slice(0, seats_open).some(record => record.full_name.toLowerCase().includes("write-in")))
 
-    //decimal rounded to nearest integer
     $: precincts_reporting_pct = (cand_records[0].precinctsreporting / cand_records[0].precinctstotal) * 100;
 
     $: question_table = /113|503/.test(office_id.substr(0, 3)) || office_id == "0421";
